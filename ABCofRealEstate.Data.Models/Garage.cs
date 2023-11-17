@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using ABCofRealEstate.Data.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,5 +19,7 @@ namespace ABCofRealEstate.Data.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Employee Employee { get; set; }
         public EnumLocality Locality { get; set; }
+        public DateTime DateTimePublished { get; set; }
+        public bool IsActual { get; set; } = true;
     }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ABCofRealEstate.Data.Enums
+﻿namespace ABCofRealEstate.Data.Enums
 {
-    internal class EnumJobTitleEmployee
+    public enum EnumJobTitleEmployee
     {
+        RealEstateAgent = 1,
+        Lawyer = 2,
+        Director = 3
     }
 }

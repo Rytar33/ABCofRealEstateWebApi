@@ -1,20 +1,18 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using ABCofRealEstate.Data.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
-    public class Hostel : IRealEstateObject, IBuilding
+    public class Hostel : IRealEstateObject, IBuilding, IResidentialProperty, IRoomInBuilding
     {
         /// <summary> Идентификатор общежития </summary>
         [Key]
         [Display(Name = "ID_Hostel")]
         public int IdHostel { get; set; }
-        /// <summary> Район </summary>
         public string? District { get; set; }
-        /// <summary> Улица </summary>
-        public string Street { get; set; }
-        /// <summary> Изображения общежития </summary>
+        public string? Street { get; set; }
         public string? URLImgs { get; set; }
         /// <summary> Площадь(в кв м) Жилая </summary>
         public int LivingSpace { get; set; } = 0;
@@ -34,15 +32,13 @@ namespace ABCofRealEstate.Data.Models
         public EnumLocality Locality { get; set; }
         /// <summary> Состояние общежития </summary>
         public EnumConditionHouse ConditionHouse { get; set; }
-        /// <summary> Количество комнат </summary>
         public int CountRooms { get; set; }
-        /// <summary> Этаж на котором находится номер общежития </summary>
         public int LocatedFloorApartament { get; set; }
-        /// <summary> Угловая? </summary>
+        public int CountFloorsHouse { get; set; }
         public bool IsCorner { get; set; }
-        /// <summary> Материал здания </summary>
         public EnumMaterialHouse? MaterialHouse { get; set; }
-        /// <summary> Тип продажи (покупка/сдача в аренду) </summary>
         public EnumTypeSale TypeSale { get; set; }
+        public DateTime DateTimePublished { get; set; }
+        public bool IsActual { get; set; } = true;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using ABCofRealEstate.Data.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,5 +29,7 @@ namespace ABCofRealEstate.Data.Models
         public int LandArea { get; set; }
         /// <summary> Населённый пункт </summary>
         public EnumLocality Locality { get; set; }
+        public DateTime DateTimePublished { get; set; }
+        public bool IsActual { get; set; } = true;
     }
 }

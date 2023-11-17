@@ -1,38 +1,28 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using ABCofRealEstate.Data.Models.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
-    public class House : IRealEstateObject, IBuilding
+    public class House : IRealEstateObject, IBuilding, IResidentialProperty
     {
         /// <summary> Идентификатор дома </summary>
         [Key]
         [Display(Name = "ID_House")]
         public int IdHouse { get; set; }
-        /// <summary> Район </summary>
         public string? District { get; set; }
-        /// <summary> Улица </summary>
         public string Street { get; set; }
-        /// <summary> Изображения дома </summary>
         public string? URLImgs { get; set; }
-        /// <summary> Описание дома </summary>
         public string Description { get; set; }
-        /// <summary> Цена дома </summary>
         public int Price { get; set; }
-        /// <summary> Идентификатор агента недвижимости </summary>
         public int? IdEmployee { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Employee Employee { get; set; }
-        /// <summary> Количество комнат </summary>
         public int CountRooms { get; set; }
-        /// <summary> Этаж в доме </summary>
         public int LocatedFloorApartament { get; set; }
-        /// <summary> Количество этажей в доме </summary>
         public int CountFloorsHouse { get; set; }
-        /// <summary> Угловая? </summary>
         public bool IsCorner { get; set; }
-        /// <summary> Материал дома </summary>
         public EnumMaterialHouse? MaterialHouse { get; set; }
         /// <summary> Состояние дома </summary>
         public EnumConditionHouse? ConditionHouse { get; set; }
@@ -50,5 +40,7 @@ namespace ABCofRealEstate.Data.Models
         public EnumTypeSale TypeSale { get; set; }
         /// <summary> Населённый пункт </summary>
         public EnumLocality Locality { get; set; }
+        public DateTime DateTimePublished { get; set; }
+        public bool IsActual { get; set; } = true;
     }
 }

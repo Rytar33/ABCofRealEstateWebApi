@@ -1,6 +1,6 @@
 ﻿using ABCofRealEstate.Data.Enums;
 
-namespace ABCofRealEstate.Data.Models
+namespace ABCofRealEstate.Data.Models.Interfaces
 {
     public interface IRealEstateObject
     {

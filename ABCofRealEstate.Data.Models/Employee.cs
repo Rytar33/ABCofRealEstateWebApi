@@ -19,5 +19,7 @@ namespace ABCofRealEstate.Data.Models
         public EnumJobTitleEmployee JobTitle { get; set; }
         /// <summary> Номер(а) телефон(а/ов) работника </summary>
         public string NumberPhone { get; set; } = null!;
+        public DateTime DateTimePublished { get; set; }
+        public bool IsActual { get; set; } = true;
     }
 }

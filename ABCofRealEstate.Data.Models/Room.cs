@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using ABCofRealEstate.Data.Models.Interfaces;
 
 namespace ABCofRealEstate.Data.Models
 {
-    internal class Room
+    public class Room : IRealEstateObject, IBuilding, IResidentialProperty, IRoomInBuilding
     {
+        [Key]
+        [Display(Name = "ID_Room")]
+        public int IdRoom { get; set; }
     }
 }
