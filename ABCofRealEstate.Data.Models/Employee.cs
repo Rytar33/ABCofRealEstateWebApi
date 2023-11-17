@@ -1,12 +1,23 @@
-﻿namespace ABCofRealEstate.Data.Models
+﻿using ABCofRealEstate.Data.Enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace ABCofRealEstate.Data.Models
 {
     public class Employee
     {
+        /// <summary> Идентификатор работника </summary>
+        [Key]
+        [Display(Name = "ID_Employee")]
         public int IdEmployee { get; set; }
+        /// <summary> Фотография работника </summary>
         public string? UrlImg { get; set; }
+        /// <summary> Электронный адресс(e-mail) работника </summary>
         public string Email { get; set; } = null!;
+        /// <summary> ФИО работника </summary>
         public string FullName { get; set; } = null!;
-        public string JobTitle { get; set; } = null!;
+        /// <summary> Должность работника </summary>
+        public EnumJobTitleEmployee JobTitle { get; set; }
+        /// <summary> Номер(а) телефон(а/ов) работника </summary>
         public string NumberPhone { get; set; } = null!;
     }
 }

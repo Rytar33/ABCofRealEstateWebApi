@@ -4,19 +4,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
-    public class Commertion : IRealEstateObject, IBuilding
+    public class Hostel : IRealEstateObject, IBuilding
     {
-        /// <summary> Идентификатор объекта коммерции </summary>
+        /// <summary> Идентификатор общежития </summary>
         [Key]
-        [Display(Name = "ID_Commertion")]
-        public int IdCommertion { get; set; }
+        [Display(Name = "ID_Hostel")]
+        public int IdHostel { get; set; }
         /// <summary> Район </summary>
         public string? District { get; set; }
         /// <summary> Улица </summary>
         public string Street { get; set; }
-        /// <summary> Ссылки на изображении объекта под коммерцию </summary>
+        /// <summary> Изображения общежития </summary>
         public string? URLImgs { get; set; }
-        /// <summary> Описание комерции </summary>
+        /// <summary> Площадь(в кв м) Жилая </summary>
+        public int LivingSpace { get; set; } = 0;
+        /// <summary> Площадь(в кв м) Общая </summary>
+        public int TotalArea { get; set; } = 0;
+        /// <summary> Площадь(в кв м) Кухни </summary>
+        public int KitchenArea { get; set; } = 0;
+        /// <summary> Описание общежития </summary>
         public string Description { get; set; }
         /// <summary> Цена </summary>
         public int Price { get; set; }
@@ -24,21 +30,19 @@ namespace ABCofRealEstate.Data.Models
         public int? IdEmployee { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Employee Employee { get; set; }
+        /// <summary> Населённый пункт </summary>
+        public EnumLocality Locality { get; set; }
+        /// <summary> Состояние общежития </summary>
+        public EnumConditionHouse ConditionHouse { get; set; }
         /// <summary> Количество комнат </summary>
         public int CountRooms { get; set; }
-        /// <summary> На каком этаже находится объект под комерцию </summary>
+        /// <summary> Этаж на котором находится номер общежития </summary>
         public int LocatedFloorApartament { get; set; }
-        /// <summary> Количество этаже в здании </summary>
-        public int CountFloorsHouse { get; set; }
         /// <summary> Угловая? </summary>
         public bool IsCorner { get; set; }
         /// <summary> Материал здания </summary>
         public EnumMaterialHouse? MaterialHouse { get; set; }
-        /// <summary> Площадь помещения </summary>
-        public int RoomArea { get; set; }
-        /// <summary> Тип продажи (продажа/сдача в аренду) </summary>
+        /// <summary> Тип продажи (покупка/сдача в аренду) </summary>
         public EnumTypeSale TypeSale { get; set; }
-        /// <summary> Населённый пункт </summary>
-        public EnumLocality Locality { get; set; }
     }
 }
