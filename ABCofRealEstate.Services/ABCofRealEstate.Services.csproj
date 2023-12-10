@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ABCofRealEstate.Data.Enums\ABCofRealEstate.Data.Enums.csproj" />
+    <ProjectReference Include="..\ABCofRealEstate.Data.Models\ABCofRealEstate.Data.Models.csproj" />
+    <ProjectReference Include="..\ABCofRealEstate.DataBaseContext\ABCofRealEstate.DataBaseContext.csproj" />
+  </ItemGroup>
+
+</Project>

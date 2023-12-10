@@ -7,13 +7,13 @@ namespace ABCofRealEstate.DataBaseContext
 {
     public class RealEstateDataContext : DbContext 
     {
-        DbSet<Employee> Employee { get; set; }
-        DbSet<Apartament> Apartament { get; set; }
-        DbSet<House> House { get; set; }
-        DbSet<Area> Area { get; set; }
-        DbSet<Commertion> Commertion { get; set; }
-        DbSet<Garage> Garage { get; set; }
-        DbSet<Hostel> Hostel { get; set; }
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<Apartament> Apartament { get; set; }
+        public DbSet<House> House { get; set; }
+        public DbSet<Area> Area { get; set; }
+        public DbSet<Commertion> Commertion { get; set; }
+        public DbSet<Garage> Garage { get; set; }
+        public DbSet<Hostel> Hostel { get; set; }
         private readonly object _connection = 
             new 
             {
