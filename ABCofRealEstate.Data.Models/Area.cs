@@ -5,29 +5,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
+    /// <summary> Модель класса "Участок" </summary>
     public class Area : IRealEstateObject
     {
         /// <summary> Идентификатор участка </summary>
         [Key]
         [Display(Name = "ID_Area")]
         public int IdArea { get; set; }
-        /// <summary> Район </summary>
         public string? District { get; set; }
-        /// <summary> Улица </summary>
-        public string Street { get; set; }
-        /// <summary> Ссылки на изображении участка </summary>
-        public string? URLImgs { get; set; }
-        /// <summary> Описание участка </summary>
-        public string Description { get; set; }
-        /// <summary> Цена за участок </summary>
+        public string? Street { get; set; }
+        public string? IdsImg { get; set; }
+        public string? Description { get; set; }
         public int Price { get; set; }
-        /// <summary> Индентификатор агента недвижимости </summary>
         public int? IdEmployee { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Employee Employee { get; set; }
+        public Employee? Employee { get; set; }
         /// <summary> Площадь участка(сот.) </summary>
         public int LandArea { get; set; }
-        /// <summary> Населённый пункт </summary>
         public EnumLocality Locality { get; set; }
         public DateTime DateTimePublished { get; set; }
         public bool IsActual { get; set; } = true;

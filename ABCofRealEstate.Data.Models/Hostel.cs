@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
+    /// <summary> Модель класса "Общежитие" </summary>
     public class Hostel : IRealEstateObject, IBuilding, IResidentialProperty, IRoomInBuilding
     {
         /// <summary> Идентификатор общежития </summary>
@@ -13,32 +14,27 @@ namespace ABCofRealEstate.Data.Models
         public int IdHostel { get; set; }
         public string? District { get; set; }
         public string? Street { get; set; }
-        public string? URLImgs { get; set; }
-        /// <summary> Площадь(в кв м) Жилая </summary>
-        public int LivingSpace { get; set; } = 0;
-        /// <summary> Площадь(в кв м) Общая </summary>
-        public int TotalArea { get; set; } = 0;
-        /// <summary> Площадь(в кв м) Кухни </summary>
-        public int KitchenArea { get; set; } = 0;
-        /// <summary> Описание общежития </summary>
-        public string Description { get; set; }
-        /// <summary> Цена </summary>
+        public string? IdsImg { get; set; }
+        public double LivingSpace { get; set; } = 0;
+        public double TotalArea { get; set; } = 0;
+        public double KitchenArea { get; set; } = 0;
+        public string? Description { get; set; }
         public int Price { get; set; }
-        /// <summary> Идентификатор агента недвижимости </summary>
         public int? IdEmployee { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Employee Employee { get; set; }
-        /// <summary> Населённый пункт </summary>
+        public Employee? Employee { get; set; }
         public EnumLocality Locality { get; set; }
-        /// <summary> Состояние общежития </summary>
-        public EnumConditionHouse ConditionHouse { get; set; }
-        public int CountRooms { get; set; }
-        public int LocatedFloorApartament { get; set; }
-        public int CountFloorsHouse { get; set; }
+        public EnumConditionHouse? ConditionHouse { get; set; }
+        public short CountRooms { get; set; } = 0;
+        public short LocatedFloorApartament { get; set; } = 0;
+        public short CountFloorsHouse { get; set; } = 0;
         public bool IsCorner { get; set; }
         public EnumMaterialHouse? MaterialHouse { get; set; }
         public EnumTypeSale TypeSale { get; set; }
         public DateTime DateTimePublished { get; set; }
         public bool IsActual { get; set; } = true;
+        public string NumberProperty { get; set; } = null!;
+        public short NumberApartament { get; set; }
+        public short CountBalcony { get; set; } = 0;
     }
 }

@@ -14,14 +14,8 @@ namespace ABCofRealEstate.DataBaseContext
         public DbSet<Commertion> Commertion { get; set; }
         public DbSet<Garage> Garage { get; set; }
         public DbSet<Hostel> Hostel { get; set; }
-        private readonly object _connection = 
-            new 
-            {
-                server = "localhost",
-                database = "ABCofRealEstate",
-                trustServerSertificate = true,
-                trustedConnection = true,
-            };
+        public DbSet<Image> Image { get; set; }
+        public DbSet<Room> Room { get; set; }
         public RealEstateDataContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,6 +30,7 @@ namespace ABCofRealEstate.DataBaseContext
             modelBuilder.Entity<Commertion>();
             modelBuilder.Entity<Garage>();
             modelBuilder.Entity<Hostel>();
+            modelBuilder.Entity<Image>();
             modelBuilder.Entity<Room>();
             // Locality
             ApplyEnumConverterToString<Apartament, EnumLocality>(modelBuilder, "Locality");
@@ -44,20 +39,24 @@ namespace ABCofRealEstate.DataBaseContext
             ApplyEnumConverterToString<Commertion, EnumLocality>(modelBuilder, "Locality");
             ApplyEnumConverterToString<Garage, EnumLocality>(modelBuilder, "Locality");
             ApplyEnumConverterToString<Hostel, EnumLocality>(modelBuilder, "Locality");
+            ApplyEnumConverterToString<Room, EnumLocality>(modelBuilder, "Locality");
             // Condition house
             ApplyEnumConverterToString<Apartament, EnumConditionHouse>(modelBuilder, "ConditionHouse");
             ApplyEnumConverterToString<House, EnumConditionHouse>(modelBuilder, "ConditionHouse");
             ApplyEnumConverterToString<Hostel, EnumConditionHouse>(modelBuilder, "ConditionHouse");
+            ApplyEnumConverterToString<Room, EnumConditionHouse>(modelBuilder, "ConditionHouse");
             // Type sales
             ApplyEnumConverterToString<Apartament, EnumTypeSale>(modelBuilder, "TypeSale");
             ApplyEnumConverterToString<House, EnumTypeSale>(modelBuilder, "TypeSale");
             ApplyEnumConverterToString<Commertion, EnumTypeSale>(modelBuilder, "TypeSale");
             ApplyEnumConverterToString<Hostel, EnumTypeSale>(modelBuilder, "TypeSale");
+            ApplyEnumConverterToString<Room, EnumTypeSale>(modelBuilder, "TypeSale");
             // Material house
             ApplyEnumConverterToString<Apartament, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<House, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<Commertion, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<Hostel, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
+            ApplyEnumConverterToString<Room, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
 
             base.OnModelCreating(modelBuilder);
         }
