@@ -20,7 +20,27 @@ namespace ABCofRealEstate.Services
             await db.House.AddAsync(
                 new House()
                 {
-
+                    Price = houseCreateRequest.Price,
+                    CountFloorsHouse = houseCreateRequest.CountFloorsHouse,
+                    LocatedFloorApartament = houseCreateRequest.LocatedFloorApartament,
+                    GardenSot = houseCreateRequest.GardenSot,
+                    Area = houseCreateRequest.Area,
+                    ConditionHouse = houseCreateRequest.ConditionHouse,
+                    CountRooms = houseCreateRequest.CountRooms,
+                    Description = houseCreateRequest.Description,
+                    IdEmployee = houseCreateRequest.IdEmployee,
+                    IdsImg = houseCreateRequest.IdsImg,
+                    TotalArea = houseCreateRequest.TotalArea,
+                    TypeSale = houseCreateRequest.TypeSale,
+                    IsCorner = houseCreateRequest.IsCorner,
+                    KitchenArea = houseCreateRequest.KitchenArea,
+                    LivingSpace = houseCreateRequest.LivingSpace,
+                    Street = houseCreateRequest.Street,
+                    NumberProperty = houseCreateRequest.NumberProperty,
+                    MaterialHouse = houseCreateRequest.MaterialHouse,
+                    Locality = houseCreateRequest.Locality,
+                    District = houseCreateRequest.District,
+                    DateTimePublished = DateTime.Now
                 });
             await db.SaveChangesAsync();
             return new BaseResponse() { IsSuccses = true };

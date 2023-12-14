@@ -1,6 +1,6 @@
 ﻿namespace ABCofRealEstate.Services.Models.Areas
 {
-    public class AreaListItem
+    public class AreaListRequest
     {
 
     }

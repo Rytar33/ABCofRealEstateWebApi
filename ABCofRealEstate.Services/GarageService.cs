@@ -20,7 +20,14 @@ namespace ABCofRealEstate.Services
             await db.Garage.AddAsync(
                 new Garage()
                 {
-
+                    District = garageCreateRequest.District,
+                    Description = garageCreateRequest.Description,
+                    IdEmployee = garageCreateRequest.IdEmployee,
+                    Locality = garageCreateRequest.Locality,
+                    IdsImg = garageCreateRequest.IdsImg,
+                    Price = garageCreateRequest.Price,
+                    Street = garageCreateRequest.Street,
+                    DateTimePublished = DateTime.Now
                 });
             await db.SaveChangesAsync();
             return new BaseResponse() { IsSuccses = true };

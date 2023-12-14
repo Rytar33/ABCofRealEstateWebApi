@@ -52,7 +52,12 @@ namespace ABCofRealEstate.Services
                     IdSource = lastApartament.IdApartament,
                     NameObject = EnumObject.Apartament
                 });
-
+            if(resultResponse.IsSuccses == false)
+            {
+                db.Apartament.Remove(lastApartament);
+                await db.SaveChangesAsync();
+                return resultResponse;
+            }
             return new BaseResponse() { IsSuccses = true };
         }
         public async Task<BaseResponse> Change(ApartamentChangeRequest apartamentChangeRequest)
@@ -75,7 +80,7 @@ namespace ABCofRealEstate.Services
                 return new ApartamentDetailResponse() { IsSuccses = false, ErrorMessage = "Квартира не была найдена" };
             return new ApartamentDetailResponse() 
             {
-                
+                IsSuccses = true
             };
         }
         public async Task<BaseResponse> Delete(int id)

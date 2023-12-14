@@ -20,7 +20,27 @@ namespace ABCofRealEstate.Services
             await db.Hostel.AddAsync(
                 new Hostel()
                 {
-
+                    CountRooms = hostelCreateRequest.CountRooms,
+                    CountFloorsHouse = hostelCreateRequest.CountFloorsHouse,
+                    LocatedFloorApartament = hostelCreateRequest.LocatedFloorApartament,
+                    ConditionHouse = hostelCreateRequest.ConditionHouse,
+                    Description = hostelCreateRequest.Description,
+                    CountBalcony = hostelCreateRequest.CountBalcony,
+                    District = hostelCreateRequest.District,
+                    Street = hostelCreateRequest.Street,
+                    IdEmployee = hostelCreateRequest.IdEmployee,
+                    IdsImg = hostelCreateRequest.IdsImg,
+                    TypeSale = hostelCreateRequest.TypeSale,
+                    TotalArea = hostelCreateRequest.TotalArea,
+                    IsCorner = hostelCreateRequest.IsCorner,
+                    KitchenArea = hostelCreateRequest.KitchenArea,
+                    LivingSpace = hostelCreateRequest.LivingSpace,
+                    Locality = hostelCreateRequest.Locality,
+                    MaterialHouse = hostelCreateRequest.MaterialHouse,
+                    NumberApartament = hostelCreateRequest.NumberApartament,
+                    NumberProperty = hostelCreateRequest.NumberProperty,
+                    Price = hostelCreateRequest.Price,
+                    DateTimePublished = DateTime.Now
                 });
             await db.SaveChangesAsync();
             return new BaseResponse() { IsSuccses = true };

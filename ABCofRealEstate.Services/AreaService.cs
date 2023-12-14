@@ -20,8 +20,17 @@ namespace ABCofRealEstate.Services
             await db.Area.AddAsync(
                 new Area()
                 {
-
+                    Street = areaCreateRequest.Street,
+                    District = areaCreateRequest.District,
+                    IdEmployee = areaCreateRequest.IdEmployee,
+                    Description = areaCreateRequest.Description,
+                    IdsImg = areaCreateRequest.IdsImg,
+                    LandArea = areaCreateRequest.LandArea,
+                    Locality = areaCreateRequest.Locality,
+                    Price = areaCreateRequest.Price,
+                    DateTimePublished = DateTime.Now
                 });
+
             await db.SaveChangesAsync();
             return new BaseResponse() { IsSuccses = true };
         }

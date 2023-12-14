@@ -11,7 +11,7 @@ namespace ABCofRealEstate.Data.Models
         [Display(Name = "ID_Employee")]
         public int IdEmployee { get; set; }
         /// <summary> Идентификатор фотографии работника </summary>
-        public int IdImg { get; set; }
+        public int? IdImg { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public Image? Image { get; set; }
         /// <summary> Электронный адресс(e-mail) работника </summary>
