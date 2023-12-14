@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace ABCofRealEstate.Data.Enums
 {
-    internal class EnumObject
+    public enum EnumObject
     {
+        Apartament = 1,
+        Area = 2,
+        Commertion = 3,
+        Garage = 4,
+        Hostel = 5,
+        House = 6,
+        Room = 7
     }
 }

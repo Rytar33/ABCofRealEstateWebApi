@@ -1,9 +1,11 @@
-﻿namespace ABCofRealEstate.Data.Models
+﻿using ABCofRealEstate.Data.Enums;
+
+namespace ABCofRealEstate.Data.Models
 {
-    public class IdsObjects
+    public class IdsObject
     {
         public int IdObject { get; set; }
-        public string NameObject { get; set; }
+        public EnumObject NameObject { get; set; }
         public int IdSource { get; set; }
     }
 }

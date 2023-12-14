@@ -15,6 +15,7 @@ namespace ABCofRealEstate.DataBaseContext
         public DbSet<Garage> Garage { get; set; }
         public DbSet<Hostel> Hostel { get; set; }
         public DbSet<Image> Image { get; set; }
+        public DbSet<IdsObject> IdsObject { get; set; }
         public DbSet<Room> Room { get; set; }
         public RealEstateDataContext() { }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +32,7 @@ namespace ABCofRealEstate.DataBaseContext
             modelBuilder.Entity<Garage>();
             modelBuilder.Entity<Hostel>();
             modelBuilder.Entity<Image>();
+            modelBuilder.Entity<IdsObject>();
             modelBuilder.Entity<Room>();
             // Locality
             ApplyEnumConverterToString<Apartament, EnumLocality>(modelBuilder, "Locality");
@@ -57,6 +59,8 @@ namespace ABCofRealEstate.DataBaseContext
             ApplyEnumConverterToString<Commertion, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<Hostel, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<Room, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
+            // Name object
+            ApplyEnumConverterToString<IdsObject, EnumObject>(modelBuilder, "NameObject");
 
             base.OnModelCreating(modelBuilder);
         }

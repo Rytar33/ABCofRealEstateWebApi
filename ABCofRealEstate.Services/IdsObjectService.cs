@@ -11,6 +11,7 @@ namespace ABCofRealEstate.Services
         public async Task<BaseResponse> Add(IdsObjectCreateRequest idsObjectCreateRequest)
         {
             using var db = new RealEstateDataContext();
+            
             await db.IdsObject.AddAsync(
                 new IdsObject()
                 {
