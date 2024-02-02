@@ -14,13 +14,16 @@ namespace ABCofRealEstate.DataBaseContext
         public DbSet<Commertion> Commertion { get; set; }
         public DbSet<Garage> Garage { get; set; }
         public DbSet<Hostel> Hostel { get; set; }
-        public DbSet<Image> Image { get; set; }
-        public DbSet<IdsObject> IdsObject { get; set; }
+        public DbSet<SourceRealEstateObject> SourceRealEstateObject { get; set; }
         public DbSet<Room> Room { get; set; }
-        public RealEstateDataContext() { }
+        public DbSet<Moderator> Moderator { get; set; }
+        public RealEstateDataContext() 
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer($"Server=localhost;Database=ABCofRealEstate;TrustServerCertificate=True;Trusted_Connection=True;");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=company_abc_real_eatste;Username=postgres;Password=");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,9 +34,9 @@ namespace ABCofRealEstate.DataBaseContext
             modelBuilder.Entity<Commertion>();
             modelBuilder.Entity<Garage>();
             modelBuilder.Entity<Hostel>();
-            modelBuilder.Entity<Image>();
-            modelBuilder.Entity<IdsObject>();
+            modelBuilder.Entity<SourceRealEstateObject>();
             modelBuilder.Entity<Room>();
+            modelBuilder.Entity<Moderator>();
             // Locality
             ApplyEnumConverterToString<Apartament, EnumLocality>(modelBuilder, "Locality");
             ApplyEnumConverterToString<House, EnumLocality>(modelBuilder, "Locality");
@@ -60,9 +63,11 @@ namespace ABCofRealEstate.DataBaseContext
             ApplyEnumConverterToString<Hostel, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             ApplyEnumConverterToString<Room, EnumMaterialHouse>(modelBuilder, "MaterialHouse");
             // Name object
-            ApplyEnumConverterToString<IdsObject, EnumObject>(modelBuilder, "NameObject");
-
-            base.OnModelCreating(modelBuilder);
+            ApplyEnumConverterToString<SourceRealEstateObject, EnumObject>(modelBuilder, "NameObject");
+            // Job title
+            ApplyEnumConverterToString<Employee, EnumJobTitleEmployee>(modelBuilder, "JobTitle");
+            // Access level
+            ApplyEnumConverterToString<Moderator, EnumAccessLevel>(modelBuilder, "AccessLevel");
         }
         private static void ApplyEnumConverterToString<TEntity, TEnum>(ModelBuilder modelBuilder, string propertyName)
             where TEntity : class

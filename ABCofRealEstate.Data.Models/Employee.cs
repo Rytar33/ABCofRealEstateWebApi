@@ -4,23 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Data.Models
 {
+    [Table("employee")]
     public class Employee
     {
         /// <summary> Идентификатор работника </summary>
         [Key]
-        [Display(Name = "ID_Employee")]
-        public int IdEmployee { get; set; }
-        /// <summary> Идентификатор фотографии работника </summary>
-        public int? IdImg { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Image? Image { get; set; }
+        [Display(Name = "id")]
+        public Guid Id { get; set; }
         /// <summary> Электронный адресс(e-mail) работника </summary>
+        [Display(Name = "email")]
         public string Email { get; set; } = null!;
         /// <summary> ФИО работника </summary>
+        [Display(Name = "full_name")]
         public string FullName { get; set; } = null!;
         /// <summary> Должность работника </summary>
+        [Display(Name = "job_title")]
         public EnumJobTitleEmployee JobTitle { get; set; }
         /// <summary> Номер(а) телефон(а/ов) работника </summary>
+        [Display(Name = "number_phone")]
         public string NumberPhone { get; set; } = null!;
     }
 }

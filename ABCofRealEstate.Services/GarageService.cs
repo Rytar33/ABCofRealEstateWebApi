@@ -4,66 +4,129 @@ using ABCofRealEstate.Services.Models.Garages;
 using ABCofRealEstate.Services.Models;
 using Microsoft.EntityFrameworkCore;
 using ABCofRealEstate.Services.Validations.Garages;
-using ABCofRealEstate.Services.Models.Apartaments;
+using ABCofRealEstate.Data.Enums;
+using ABCofRelEstate.ExportTool;
+using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
+using ABCofRealEstate.Services.Models.Rooms;
 
 namespace ABCofRealEstate.Services
 {
     public class GarageService
     {
-        public async Task<BaseResponse> Create(GarageCreateRequest garageCreateRequest)
+        public async Task<BaseResponse<GarageDetailResponse>> Create(GarageCreateRequest garageCreateRequest)
         {
             var resultValidation = garageCreateRequest.GetResultValidation();
             if (resultValidation.IsSuccses == false) return resultValidation;
-
-            using var db = new RealEstateDataContext();
-
-            await db.Garage.AddAsync(
-                new Garage()
+            BaseResponse<SourceRealEstateObject>? resultResponse = null;
+            if (garageCreateRequest.SourceRealEstateObjectId is null)
+            {
+                resultResponse = await new SourceRealEstateObjectService()
+                .Add(new SourceRealEstateObjectCreateRequest()
                 {
-                    District = garageCreateRequest.District,
-                    Description = garageCreateRequest.Description,
-                    IdEmployee = garageCreateRequest.IdEmployee,
-                    Locality = garageCreateRequest.Locality,
-                    IdsImg = garageCreateRequest.IdsImg,
-                    Price = garageCreateRequest.Price,
-                    Street = garageCreateRequest.Street,
-                    DateTimePublished = DateTime.Now
+                    NameObject = EnumObject.Garage
                 });
+                if (resultResponse != null && resultResponse.IsSuccses == false)
+                    return new BaseResponse<GarageDetailResponse>()
+                    {
+                        IsSuccses = resultResponse.IsSuccses,
+                        ErrorMessage = resultResponse.ErrorMessage
+                    };
+            }
+            var garage = new Garage()
+            {
+                District = garageCreateRequest.District,
+                Description = garageCreateRequest.Description,
+                EmployeeId = garageCreateRequest.IdEmployee,
+                Locality = garageCreateRequest.Locality,
+                Price = garageCreateRequest.Price,
+                Street = garageCreateRequest.Street,
+                DateTimePublished = DateTime.Now,
+                TypeSale = garageCreateRequest.TypeSale,
+                SourceRealEstateObjectId =
+                resultResponse is not null
+                ? resultResponse.Data!.Id
+                : garageCreateRequest.SourceRealEstateObjectId!.Value
+            };
+            using var db = new RealEstateDataContext();
+            await db.Garage.AddAsync(garage);
             await db.SaveChangesAsync();
-            return new BaseResponse() { IsSuccses = true };
+            await new ExportJpgService()
+                .ImportManyFile(
+                $"~/Files/Img/RealEstateObjects/{resultResponse!.Data!.Id}",
+                garageCreateRequest.Files);
+            return await Get(garage.Id);
         }
-        public async Task<BaseResponse> Change(GarageChangeRequest garageChangeRequest)
+        public async Task<BaseResponse<GarageDetailResponse>> Change(GarageChangeRequest garageChangeRequest)
         {
             var resultValidation = garageChangeRequest.GetResultValidation();
             if (resultValidation.IsSuccses == false) return resultValidation;
-
             using var db = new RealEstateDataContext();
-
-
-
+            var garageGet = await db.Garage.AsNoTracking().FirstOrDefaultAsync(g => g.Id == garageChangeRequest.IdGarage);
+            if(garageGet == null)
+                return new BaseResponse<GarageDetailResponse>() 
+                {
+                    IsSuccses = false,
+                    ErrorMessage = "Гараж не был найден"
+                };
+            var garage = new Garage()
+            {
+                Id = garageChangeRequest.IdGarage,
+                District = garageChangeRequest.District,
+                Description = garageChangeRequest.Description,
+                EmployeeId = garageChangeRequest.IdEmployee,
+                Locality = garageChangeRequest.Locality,
+                Price = garageChangeRequest.Price,
+                Street = garageChangeRequest.Street,
+                IsActual = garageChangeRequest.IsActual,
+                TypeSale = garageChangeRequest.TypeSale,
+                DateTimePublished = garageGet.DateTimePublished,
+                SourceRealEstateObjectId = garageGet.SourceRealEstateObjectId
+            };
+            db.Garage.Update(garage);
             await db.SaveChangesAsync();
-            return new BaseResponse() { IsSuccses = true };
+            return await Get(garage.Id);
         }
-        public GarageDetailResponse Get(int id)
+        public async Task<BaseResponse<GarageDetailResponse>> Get(Guid id)
         {
             using var db = new RealEstateDataContext();
-            var garage = db.Garage.FirstOrDefaultAsync(g => g.IdGarage == id);
+            var garage = await db.Garage.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
             if (garage == null)
-                return new GarageDetailResponse() { IsSuccses = false, ErrorMessage = "Гараж не был найден" };
-            return new GarageDetailResponse()
+                return new BaseResponse<GarageDetailResponse>() { IsSuccses = false, ErrorMessage = "Гараж не был найден" };
+            var responseEmployee =
+                garage.EmployeeId is not null
+                ? await new EmployeeService().Get((Guid)garage.EmployeeId) : null;
+            var fullPathsImage = new ExportJpgService().ExportFullPathsJpg($"~/Files/Img/RealEstateObjects/{garage.SourceRealEstateObjectId}");
+            return new BaseResponse<GarageDetailResponse>()
             {
-                IsSuccses = true
+                IsSuccses = true,
+                Data = new GarageDetailResponse()
+                {
+                    FullPathsImage = fullPathsImage,
+                    IdGarage = garage.Id,
+                    Employee = responseEmployee?.Data,
+                    DateTimePublished = garage.DateTimePublished,
+                    Description = garage.Description,
+                    District = garage.District,
+                    IsActual = garage.IsActual,
+                    Locality = garage.Locality,
+                    Price = garage.Price,
+                    Street = garage.Street,
+                    TypeSale = garage.TypeSale
+                }
             };
         }
-        public async Task<BaseResponse> Delete(int id)
+        public async Task<BaseResponse<GarageDetailResponse>> Delete(Guid id)
         {
+            var serviceRealEstateObject = new SourceRealEstateObjectService();
             using var db = new RealEstateDataContext();
-            var garage = db.Garage.FirstOrDefaultAsync(g => g.IdGarage == id);
+            var garage = await db.Garage.AsNoTracking().FirstOrDefaultAsync(g => g.Id == id);
             if (garage == null)
-                return new ApartamentDetailResponse() { IsSuccses = false, ErrorMessage = "Гараж не был найден" };
-            db.Garage.Remove(await garage);
+                return new BaseResponse<GarageDetailResponse>() { IsSuccses = false, ErrorMessage = "Гараж не был найден" };
+            Guid idSourceObject = garage.SourceRealEstateObjectId;
+            db.Garage.Remove(garage);
             await db.SaveChangesAsync();
-            return new BaseResponse() { IsSuccses = true };
+            await serviceRealEstateObject.Delete(idSourceObject);
+            return new BaseResponse<GarageDetailResponse>() { IsSuccses = true };
         }
     }
 }

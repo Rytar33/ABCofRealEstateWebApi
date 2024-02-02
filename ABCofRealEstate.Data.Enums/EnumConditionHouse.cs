@@ -1,5 +1,8 @@
-﻿namespace ABCofRealEstate.Data.Enums
+﻿using System.Text.Json.Serialization;
+
+namespace ABCofRealEstate.Data.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum EnumConditionHouse
     {
         NeedsRenovation = 1, // требует ремонта

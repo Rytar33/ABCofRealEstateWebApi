@@ -3,8 +3,8 @@ using System;
 using ABCofRealEstate.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -18,20 +18,18 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.13")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Apartament", b =>
                 {
-                    b.Property<int>("IdApartament")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdApartament"));
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("ConditionHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("CountBalcony")
                         .HasColumnType("smallint");
@@ -43,128 +41,125 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsCorner")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<double>("KitchenArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("LivingSpace")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<short>("LocatedFloorApartament")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("MaterialHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("NumberApartament")
                         .HasColumnType("smallint");
 
                     b.Property<string>("NumberProperty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TypeSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdApartament");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasIndex("EmployeeId");
 
-                    b.ToTable("Apartament");
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("apartament");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Area", b =>
                 {
-                    b.Property<int>("IdArea")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdArea"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("LandArea")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdArea");
+                    b.Property<int>("TypeSale")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasKey("Id");
 
-                    b.ToTable("Area");
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("area");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Commertion", b =>
                 {
-                    b.Property<int>("IdCommertion")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCommertion"));
+                        .HasColumnType("uuid");
 
                     b.Property<short>("CountFloorsHouse")
                         .HasColumnType("smallint");
@@ -173,155 +168,143 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsCorner")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<short>("LocatedFloorApartament")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("MaterialHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("NumberProperty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<double>("RoomArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("TypeSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdCommertion");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasIndex("EmployeeId");
 
-                    b.ToTable("Commertion");
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("commertion");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Employee", b =>
                 {
-                    b.Property<int>("IdEmployee")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdEmployee"));
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int>("IdImg")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ImageIdImg")
-                        .HasColumnType("int");
-
-                    b.Property<int>("JobTitle")
-                        .HasColumnType("int");
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("NumberPhone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdEmployee");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ImageIdImg");
-
-                    b.ToTable("Employee");
+                    b.ToTable("employee");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Garage", b =>
                 {
-                    b.Property<int>("IdGarage")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdGarage"));
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdGarage");
+                    b.Property<int>("TypeSale")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasKey("Id");
 
-                    b.ToTable("Garage");
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("garage");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Hostel", b =>
                 {
-                    b.Property<int>("IdHostel")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdHostel"));
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("ConditionHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("CountBalcony")
                         .HasColumnType("smallint");
@@ -333,85 +316,82 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsCorner")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<double>("KitchenArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("LivingSpace")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<short>("LocatedFloorApartament")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("MaterialHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("NumberApartament")
                         .HasColumnType("smallint");
 
                     b.Property<string>("NumberProperty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TypeSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdHostel");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasIndex("EmployeeId");
 
-                    b.ToTable("Hostel");
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("hostel");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.House", b =>
                 {
-                    b.Property<int>("IdHouse")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdHouse"));
+                        .HasColumnType("uuid");
 
                     b.Property<double>("Area")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("ConditionHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("CountFloorsHouse")
                         .HasColumnType("smallint");
@@ -420,106 +400,109 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<double>("GardenSot")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("double precision");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsCorner")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<double>("KitchenArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("LivingSpace")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<short>("LocatedFloorApartament")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("MaterialHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("NumberProperty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TypeSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdHouse");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasIndex("EmployeeId");
 
-                    b.ToTable("House");
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("house");
                 });
 
-            modelBuilder.Entity("ABCofRealEstate.Data.Models.Image", b =>
+            modelBuilder.Entity("ABCofRealEstate.Data.Models.Moderator", b =>
                 {
-                    b.Property<int>("IdImg")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uuid");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdImg"));
-
-                    b.Property<byte[]>("DataImg")
+                    b.Property<string>("AccessLevel")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("text");
 
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
+                    b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdImg");
+                    b.Property<bool>("IsSuperModerator")
+                        .HasColumnType("boolean");
 
-                    b.ToTable("Image");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("moderator");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Room", b =>
                 {
-                    b.Property<int>("IdRoom")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdRoom"));
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("ConditionHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("CountBalcony")
                         .HasColumnType("smallint");
@@ -531,142 +514,203 @@ namespace ABCofRealEstate.DataBaseContext.Migrations
                         .HasColumnType("smallint");
 
                     b.Property<DateTime>("DateTimePublished")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("District")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.Property<int?>("EmployeeIdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdEmployee")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdsImg")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("IsActual")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsCorner")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<double>("KitchenArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<double>("LivingSpace")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("Locality")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<short>("LocatedFloorApartament")
                         .HasColumnType("smallint");
 
                     b.Property<int?>("MaterialHouse")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<short>("NumberApartament")
                         .HasColumnType("smallint");
 
                     b.Property<string>("NumberProperty")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Price")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("SourceRealEstateObjectId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalArea")
-                        .HasColumnType("float");
+                        .HasColumnType("double precision");
 
                     b.Property<string>("TypeSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
-                    b.HasKey("IdRoom");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EmployeeIdEmployee");
+                    b.HasIndex("EmployeeId");
 
-                    b.ToTable("Room");
+                    b.HasIndex("SourceRealEstateObjectId");
+
+                    b.ToTable("room");
+                });
+
+            modelBuilder.Entity("ABCofRealEstate.Data.Models.SourceRealEstateObject", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("NameObject")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("source_real_estate_object");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Apartament", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Area", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Commertion", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
-                });
 
-            modelBuilder.Entity("ABCofRealEstate.Data.Models.Employee", b =>
-                {
-                    b.HasOne("ABCofRealEstate.Data.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageIdImg");
-
-                    b.Navigation("Image");
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Garage", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Hostel", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.House", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 
             modelBuilder.Entity("ABCofRealEstate.Data.Models.Room", b =>
                 {
                     b.HasOne("ABCofRealEstate.Data.Models.Employee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeIdEmployee");
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("ABCofRealEstate.Data.Models.SourceRealEstateObject", "SourceRealEstateObject")
+                        .WithMany()
+                        .HasForeignKey("SourceRealEstateObjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
+
+                    b.Navigation("SourceRealEstateObject");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Houses
 {
     public static class ValidationHouseCreateRequest
     {
-        public static BaseResponse GetResultValidation(this HouseCreateRequest houseCreateRequest)
+        public static BaseResponse<HouseDetailResponse> GetResultValidation(this HouseCreateRequest houseCreateRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<HouseDetailResponse> { IsSuccses = true };
         }
     }
 }

@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Commertions
 {
     public static class ValidationCommertionChangeRequest
     {
-        public static BaseResponse GetResultValidation(this CommertionChangeRequest commertionChangeRequest)
+        public static BaseResponse<CommertionDetailResponse> GetResultValidation(this CommertionChangeRequest commertionChangeRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<CommertionDetailResponse> { IsSuccses = true };
         }
     }
 }

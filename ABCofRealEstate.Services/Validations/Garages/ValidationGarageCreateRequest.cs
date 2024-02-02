@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Garages
 {
     public static class ValidationGarageCreateRequest
     {
-        public static BaseResponse GetResultValidation(this GarageCreateRequest garageCreateRequest)
+        public static BaseResponse<GarageDetailResponse> GetResultValidation(this GarageCreateRequest garageCreateRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<GarageDetailResponse> { IsSuccses = true };
         }
     }
 }

@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Areas
 {
     public static class ValidationAreaChangeRequest
     {
-        public static BaseResponse GetResultValidation(this AreaChangeRequest areaChangeRequest)
+        public static BaseResponse<AreaDetailResponse> GetResultValidation(this AreaChangeRequest areaChangeRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<AreaDetailResponse> { IsSuccses = true };
         }
     }
 }

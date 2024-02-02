@@ -1,5 +1,6 @@
 ﻿using ABCofRealEstate.Data.Enums;
 using ABCofRealEstate.Data.Models;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ABCofRealEstate.Services.Models.Houses
@@ -8,12 +9,9 @@ namespace ABCofRealEstate.Services.Models.Houses
     {
         public string? District { get; set; }
         public string? Street { get; set; }
-        public string? IdsImg { get; set; }
         public string? Description { get; set; }
         public int Price { get; set; }
-        public int? IdEmployee { get; set; }
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public Employee? Employee { get; set; }
+        public Guid? IdEmployee { get; set; }
         public short CountRooms { get; set; } = 0;
         public short LocatedFloorApartament { get; set; }
         public short CountFloorsHouse { get; set; }
@@ -28,5 +26,7 @@ namespace ABCofRealEstate.Services.Models.Houses
         public EnumTypeSale TypeSale { get; set; }
         public EnumLocality Locality { get; set; }
         public string NumberProperty { get; set; } = null!;
+        public Guid? SourceRealEstateObjectId { get; set; }
+        public ICollection<IFormFile> Files { get; set; } = new List<IFormFile>();
     }
 }

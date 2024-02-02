@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace ABCofRealEstate.Data.Enums
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum EnumObject
     {
         Apartament = 1,

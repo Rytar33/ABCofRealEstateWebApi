@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace ABCofRealEstate.Services.Models.Hostels
 {
@@ -6,13 +7,12 @@ namespace ABCofRealEstate.Services.Models.Hostels
     {
         public string? District { get; set; }
         public string? Street { get; set; }
-        public string? IdsImg { get; set; }
         public double LivingSpace { get; set; }
         public double TotalArea { get; set; }
         public double KitchenArea { get; set; }
         public string? Description { get; set; }
         public int Price { get; set; }
-        public int? IdEmployee { get; set; }
+        public Guid? IdEmployee { get; set; }
         public EnumLocality Locality { get; set; }
         public EnumConditionHouse? ConditionHouse { get; set; }
         public short CountRooms { get; set; }
@@ -24,5 +24,7 @@ namespace ABCofRealEstate.Services.Models.Hostels
         public string NumberProperty { get; set; } = null!;
         public short NumberApartament { get; set; }
         public short CountBalcony { get; set; }
+        public Guid? SourceRealEstateObjectId { get; set; }
+        public ICollection<IFormFile> Files { get; set; } = new List<IFormFile>();
     }
 }

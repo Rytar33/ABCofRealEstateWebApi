@@ -7,9 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ABCofRealEstate.Data.Enums\ABCofRealEstate.Data.Enums.csproj" />
     <ProjectReference Include="..\ABCofRealEstate.Data.Models\ABCofRealEstate.Data.Models.csproj" />
     <ProjectReference Include="..\ABCofRealEstate.DataBaseContext\ABCofRealEstate.DataBaseContext.csproj" />
+    <ProjectReference Include="..\ABCofRelEstate.ExportTool\ABCofRelEstate.ExportTool.csproj" />
   </ItemGroup>
 
 </Project>

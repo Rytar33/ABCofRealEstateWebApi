@@ -15,8 +15,6 @@ namespace ABCofRealEstate.Data.Models.Interfaces
         public bool IsCorner { get; set; }
         /// <summary> Материал здания </summary>
         public EnumMaterialHouse? MaterialHouse { get; set; }
-        /// <summary> Тип продажи (продажа/сдача в аренду) </summary>
-        public EnumTypeSale TypeSale { get; set; }
         /// <summary> Номер здания или дома </summary>
         public string NumberProperty { get; set; }
     }

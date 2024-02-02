@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Employees
 {
     public static class ValidationEmployeeChangeRequest
     {
-        public static BaseResponse GetResultValidation(this EmployeeChangeRequest employeeChangeRequest)
+        public static BaseResponse<EmployeeDetailResponse> GetResultValidation(this EmployeeChangeRequest employeeChangeRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<EmployeeDetailResponse> { IsSuccses = true };
         }
     }
 }

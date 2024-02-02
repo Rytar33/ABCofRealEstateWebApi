@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Hostels
 {
     public static class ValidationHostelCreateRequest
     {
-        public static BaseResponse GetResultValidation(this HostelCreateRequest hostelCreateRequest)
+        public static BaseResponse<HostelDetailResponse> GetResultValidation(this HostelCreateRequest hostelCreateRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<HostelDetailResponse> { IsSuccses = true };
         }
     }
 }

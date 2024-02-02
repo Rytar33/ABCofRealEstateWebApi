@@ -5,10 +5,10 @@ namespace ABCofRealEstate.Services.Validations.Apartaments
 {
     public static class ValidationApartamentCreateRequest
     {
-        public static BaseResponse GetResultValidation(this ApartamentCreateRequest apartamentCreateRequest)
+        public static BaseResponse<ApartamentDetailResponse> GetResultValidation(this ApartamentCreateRequest apartamentCreateRequest)
         {
 
-            return new BaseResponse { IsSuccses = true };
+            return new BaseResponse<ApartamentDetailResponse> { IsSuccses = true };
         }
     }
 }
