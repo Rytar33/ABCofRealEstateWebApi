@@ -1,110 +1,90 @@
-﻿using ABCofRealEstate.Data.Models;
-using ABCofRealEstate.DataBaseContext;
-using ABCofRealEstate.Services.Models.Houses;
-using ABCofRealEstate.Services.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using ABCofRealEstate.Services.Models.Houses;
 using ABCofRealEstate.Services.Validations.Houses;
-using ABCofRealEstate.Data.Enums;
-using ABCofRelEstate.ExportTool;
-using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
-using ABCofRealEstate.Services.Models.Apartaments;
-using ABCofRealEstate.Services.Models.Hostels;
-using ABCofRealEstate.Services.Models.Rooms;
 
 namespace ABCofRealEstate.Services
 {
-    public class HouseService
+    public class HouseService : IHouseService
     {
         public async Task<BaseResponse<HouseDetailResponse>> Create(HouseCreateRequest houseCreateRequest)
         {
             var resultValidation = houseCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            BaseResponse<SourceRealEstateObject>? resultResponse = null;
-            if (houseCreateRequest.SourceRealEstateObjectId is null)
-            {
-                resultResponse = await new SourceRealEstateObjectService()
-                .Add(new SourceRealEstateObjectCreateRequest()
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            var resultResponse = await new SourceRealEstateObjectService()
+                .Create(new SourceRealEstateObjectCreateRequest(EnumObject.House));
+            if (!resultResponse.IsSuccess)
+                return new BaseResponse<HouseDetailResponse>
                 {
-                    NameObject = EnumObject.House
-                });
-                if (resultResponse != null && resultResponse.IsSuccses == false)
-                    return new BaseResponse<HouseDetailResponse>()
-                    {
-                        IsSuccses = resultResponse.IsSuccses,
-                        ErrorMessage = resultResponse.ErrorMessage
-                    };
-            }
-            var house = new House()
+                    IsSuccess = resultResponse.IsSuccess,
+                    ErrorMessage = resultResponse.ErrorMessage
+                };
+            var house = new House(
+                houseCreateRequest.CountRooms,
+                houseCreateRequest.District,
+                houseCreateRequest.Street,
+                houseCreateRequest.NumberProperty,
+                houseCreateRequest.ConditionHouse,
+                houseCreateRequest.LivingSpace,
+                houseCreateRequest.TotalArea,
+                houseCreateRequest.KitchenArea,
+                houseCreateRequest.CountFloorsHouse,
+                houseCreateRequest.LocatedFloorApartment,
+                houseCreateRequest.IsCorner,
+                houseCreateRequest.MaterialHouse,
+                houseCreateRequest.Description,
+                houseCreateRequest.Price,
+                houseCreateRequest.EmployeeId,
+                houseCreateRequest.TypeSale,
+                houseCreateRequest.Locality,
+                houseCreateRequest.GardenSot,
+                houseCreateRequest.Area)
             {
-                Price = houseCreateRequest.Price,
-                CountFloorsHouse = houseCreateRequest.CountFloorsHouse,
-                LocatedFloorApartament = houseCreateRequest.LocatedFloorApartament,
-                GardenSot = houseCreateRequest.GardenSot,
-                Area = houseCreateRequest.Area,
-                ConditionHouse = houseCreateRequest.ConditionHouse,
-                CountRooms = houseCreateRequest.CountRooms,
-                Description = houseCreateRequest.Description,
-                TotalArea = houseCreateRequest.TotalArea,
-                TypeSale = houseCreateRequest.TypeSale,
-                IsCorner = houseCreateRequest.IsCorner,
-                KitchenArea = houseCreateRequest.KitchenArea,
-                LivingSpace = houseCreateRequest.LivingSpace,
-                Street = houseCreateRequest.Street,
-                NumberProperty = houseCreateRequest.NumberProperty,
-                MaterialHouse = houseCreateRequest.MaterialHouse,
-                Locality = houseCreateRequest.Locality,
-                District = houseCreateRequest.District,
-                DateTimePublished = DateTime.Now,
-                SourceRealEstateObjectId =
-                resultResponse is not null
-                ? resultResponse.Data!.Id
-                : houseCreateRequest.SourceRealEstateObjectId!.Value
+                SourceRealEstateObjectId = resultResponse.Data!.Id
             };
-            using var db = new RealEstateDataContext();
+            await using var db = new RealEstateDataContext();
             await db.House.AddAsync(house);
             await db.SaveChangesAsync();
-            await new ExportJpgService()
+            await ExportImageService
                 .ImportManyFile(
-                $"~/Files/Img/RealEstateObjects/{resultResponse!.Data!.Id}",
+                $"wwwroot/images/real-estate-objects/{resultResponse!.Data!.Id}",
                 houseCreateRequest.Files);
             return await Get(house.Id);
         }
         public async Task<BaseResponse<HouseDetailResponse>> Change(HouseChangeRequest houseChangeRequest)
         {
             var resultValidation = houseChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            using var db = new RealEstateDataContext();
-            var houseGet = await db.House.AsNoTracking().FirstOrDefaultAsync(h => h.Id == houseChangeRequest.IdHouse);
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            await using var db = new RealEstateDataContext();
+            var houseGet = await db.House.AsNoTracking().FirstOrDefaultAsync(h => h.Id == houseChangeRequest.Id);
             if (houseGet == null)
                 return new BaseResponse<HouseDetailResponse>()
                 {
-                    IsSuccses = false,
+                    IsSuccess = false,
                     ErrorMessage = "Такого дома не было найдено"
                 };
-            var house = new House()
+            var house = new House(
+                houseChangeRequest.CountRooms,
+                houseChangeRequest.District,
+                houseChangeRequest.Street,
+                houseChangeRequest.NumberProperty,
+                houseChangeRequest.ConditionHouse,
+                houseChangeRequest.LivingSpace,
+                houseChangeRequest.TotalArea,
+                houseChangeRequest.KitchenArea,
+                houseChangeRequest.CountFloorsHouse,
+                houseChangeRequest.LocatedFloorApartment,
+                houseChangeRequest.IsCorner,
+                houseChangeRequest.MaterialHouse,
+                houseChangeRequest.Description,
+                houseChangeRequest.Price,
+                houseChangeRequest.EmployeeId,
+                houseChangeRequest.TypeSale,
+                houseChangeRequest.Locality,
+                houseChangeRequest.GardenSot,
+                houseChangeRequest.Area)
             {
-                Id = houseChangeRequest.IdHouse,
-                Price = houseChangeRequest.Price,
-                CountFloorsHouse = houseChangeRequest.CountFloorsHouse,
-                LocatedFloorApartament = houseChangeRequest.LocatedFloorApartament,
-                GardenSot = houseChangeRequest.GardenSot,
-                Area = houseChangeRequest.Area,
-                ConditionHouse = houseChangeRequest.ConditionHouse,
-                CountRooms = houseChangeRequest.CountRooms,
-                Description = houseChangeRequest.Description,
-                TotalArea = houseChangeRequest.TotalArea,
-                TypeSale = houseChangeRequest.TypeSale,
-                IsCorner = houseChangeRequest.IsCorner,
-                KitchenArea = houseChangeRequest.KitchenArea,
-                LivingSpace = houseChangeRequest.LivingSpace,
-                Street = houseChangeRequest.Street,
-                NumberProperty = houseChangeRequest.NumberProperty,
-                MaterialHouse = houseChangeRequest.MaterialHouse,
-                Locality = houseChangeRequest.Locality,
-                District = houseChangeRequest.District,
+                Id = houseChangeRequest.Id,
                 IsActual = houseChangeRequest.IsActual,
                 DateTimePublished = houseGet.DateTimePublished,
-                EmployeeId = houseChangeRequest.IdEmployee,
                 SourceRealEstateObjectId = houseGet.SourceRealEstateObjectId
             };
             db.House.Update(house);
@@ -113,57 +93,64 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<HouseDetailResponse>> Get(Guid id)
         {
-            using var db = new RealEstateDataContext();
+            await using var db = new RealEstateDataContext();
             var house = await db.House.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
             if (house == null)
-                return new BaseResponse<HouseDetailResponse>() { IsSuccses = false, ErrorMessage = "Дом не был найден" };
+                return new BaseResponse<HouseDetailResponse>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Дом не был найден"
+                };
             var responseEmployee =
                house.EmployeeId is not null
                ? await new EmployeeService().Get((Guid)house.EmployeeId) : null;
-            var fullPathsImage = new ExportJpgService().ExportFullPathsJpg($"~/Files/Img/RealEstateObjects/{house.SourceRealEstateObjectId}");
-            return new BaseResponse<HouseDetailResponse>()
+            var fullPathsImage = ExportImageService.ExportFullPathsImage(
+                $"wwwroot/images/real-estate-objects/{house.SourceRealEstateObjectId}");
+            return new BaseResponse<HouseDetailResponse>
             {
-                IsSuccses = true,
-                Data = new HouseDetailResponse()
-                {
-                    FullPathsImage = fullPathsImage,
-                    IdHouse = house.Id,
-                    CountFloorsHouse = house.CountFloorsHouse,
-                    LocatedFloorApartament = house.LocatedFloorApartament,
-                    Area = house.Area,
-                    ConditionHouse = house.ConditionHouse,
-                    CountRooms = house.CountRooms,
-                    DateTimePublished = house.DateTimePublished,
-                    Description = house.Description,
-                    District = house.District,
-                    Employee = responseEmployee?.Data,
-                    GardenSot = house.GardenSot,
-                    IsActual = house.IsActual,
-                    IsCorner = house.IsCorner,
-                    KitchenArea = house.KitchenArea,
-                    LivingSpace = house.LivingSpace,
-                    Locality = house.Locality,
-                    MaterialHouse = house.MaterialHouse,
-                    NumberProperty = house.NumberProperty,
-                    Price = house.Price,
-                    Street = house.Street,
-                    TotalArea = house.TotalArea,
-                    TypeSale = house.TypeSale
-                }
+                IsSuccess = true,
+                Data = new HouseDetailResponse(
+                    house.Id,
+                    house.CountRooms,
+                    house.District,
+                    house.Street,
+                    house.NumberProperty,
+                    house.ConditionHouse,
+                    house.LivingSpace,
+                    house.TotalArea,
+                    house.KitchenArea,
+                    house.IsCorner,
+                    house.CountFloorsHouse,
+                    house.LocatedFloorApartment,
+                    house.MaterialHouse,
+                    house.Description,
+                    house.Price,
+                    responseEmployee?.Data,
+                    house.TypeSale,
+                    house.Locality,
+                    house.GardenSot,
+                    house.Area,
+                    house.IsActual,
+                    house.DateTimePublished,
+                    fullPathsImage)
             };
         }
         public async Task<BaseResponse<HouseDetailResponse>> Delete(Guid id)
         {
-            var serviceRealEstateObject = new SourceRealEstateObjectService();
-            using var db = new RealEstateDataContext();
+            ISourceRealEstateObjectService serviceRealEstateObject = new SourceRealEstateObjectService();
+            await using var db = new RealEstateDataContext();
             var house = await db.House.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
             if (house == null)
-                return new BaseResponse<HouseDetailResponse>() { IsSuccses = false, ErrorMessage = "Дом не был найден" };
-            Guid idSourceObject = house.SourceRealEstateObjectId;
+                return new BaseResponse<HouseDetailResponse> 
+                    { 
+                        IsSuccess = false,
+                        ErrorMessage = "Дом не был найден"
+                    };
+            var idSourceObject = house.SourceRealEstateObjectId;
             db.House.Remove(house);
             await db.SaveChangesAsync();
             await serviceRealEstateObject.Delete(idSourceObject);
-            return new BaseResponse<HouseDetailResponse>() { IsSuccses = true };
+            return new BaseResponse<HouseDetailResponse> { IsSuccess = true };
         }
     }
 }

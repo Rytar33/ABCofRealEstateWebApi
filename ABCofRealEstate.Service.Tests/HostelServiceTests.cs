@@ -4,180 +4,114 @@ namespace ABCofRealEstate.Service.Tests
 {
     public class HostelServiceTests
     {
+        private async Task<HostelCreateRequest> GetHostelCreateRequest()
+        {
+            ITestDataGenerator testDataGenerator = new TestDataGenerator();
+            var hostel = await testDataGenerator.GetGenerationHostel();
+            return new HostelCreateRequest(
+                hostel.CountRooms,
+                hostel.District,
+                hostel.Street,
+                hostel.NumberApartment,
+                hostel.NumberProperty,
+                hostel.ConditionHouse,
+                hostel.LivingSpace,
+                hostel.TotalArea,
+                hostel.KitchenArea,
+                hostel.IsCorner,
+                hostel.CountFloorsHouse,
+                hostel.LocatedFloorApartment,
+                hostel.CountBalcony,
+                hostel.MaterialHouse,
+                hostel.Description,
+                hostel.Price,
+                hostel.EmployeeId,
+                hostel.TypeSale,
+                hostel.Locality,
+                new List<IFormFile>());
+        }
         [Fact]
         public async Task GetHostelFromServiceTest()
         {
             // Arrange
-            var hostelService = new HostelService();
-            var hostel = await new TestDataGenerator().GetGenerationHostel();
-            var hostelCreateRequest = new HostelCreateRequest()
-            {
-                CountFloorsHouse = hostel.CountFloorsHouse,
-                LocatedFloorApartament = hostel.LocatedFloorApartament,
-                ConditionHouse = hostel.ConditionHouse,
-                CountBalcony = hostel.CountBalcony,
-                CountRooms = hostel.CountRooms,
-                Description = hostel.Description,
-                District = hostel.District,
-                IdEmployee = hostel.EmployeeId,
-                IsCorner = hostel.IsCorner,
-                KitchenArea = hostel.KitchenArea,
-                LivingSpace = hostel.LivingSpace,
-                Locality = hostel.Locality,
-                MaterialHouse = hostel.MaterialHouse,
-                NumberApartament = hostel.NumberApartament,
-                NumberProperty = hostel.NumberProperty,
-                Price = hostel.Price,
-                Street = hostel.Street,
-                TotalArea = hostel.TotalArea,
-                TypeSale = hostel.TypeSale
-            };
+            IHostelService hostelService = new HostelService();
+            var hostelCreateRequest = await GetHostelCreateRequest();
             var responseCreated = await hostelService.Create(hostelCreateRequest);
 
             // Act
-            var responseGet = await hostelService.Get(responseCreated.Data!.IdHostel);
+            var responseGet = await hostelService.Get(responseCreated.Data!.Id);
 
             // Assert
-            Assert.True(responseGet.IsSuccses && responseGet.Data != null);
-            await hostelService.Delete(responseGet.Data!.IdHostel);
+            Assert.True(responseGet.IsSuccess && responseGet.Data != null);
+            await hostelService.Delete(responseGet.Data!.Id);
         }
         [Fact]
         public async Task AddHostelInServiceTest()
         {
             // Arrange
-            var hostelService = new HostelService();
-            var hostel = await new TestDataGenerator().GetGenerationHostel();
-            var hostelCreateRequest = new HostelCreateRequest()
-            {
-                CountFloorsHouse = hostel.CountFloorsHouse,
-                LocatedFloorApartament = hostel.LocatedFloorApartament,
-                ConditionHouse = hostel.ConditionHouse,
-                CountBalcony = hostel.CountBalcony,
-                CountRooms = hostel.CountRooms,
-                Description = hostel.Description,
-                District = hostel.District,
-                IdEmployee = hostel.EmployeeId,
-                IsCorner = hostel.IsCorner,
-                KitchenArea = hostel.KitchenArea,
-                LivingSpace = hostel.LivingSpace,
-                Locality = hostel.Locality,
-                MaterialHouse = hostel.MaterialHouse,
-                NumberApartament = hostel.NumberApartament,
-                NumberProperty = hostel.NumberProperty,
-                Price = hostel.Price,
-                Street = hostel.Street,
-                TotalArea = hostel.TotalArea,
-                TypeSale = hostel.TypeSale
-            };
+            IHostelService hostelService = new HostelService();
+            var hostelCreateRequest = await GetHostelCreateRequest();
 
             // Act
             var responseCreated = await hostelService.Create(hostelCreateRequest);
-            if (responseCreated.IsSuccses == false)
+            if (responseCreated.IsSuccess == false)
                 Assert.Fail(responseCreated.ErrorMessage);
             // Assert
-            Assert.True(responseCreated.IsSuccses && responseCreated.Data != null);
-            await hostelService.Delete(responseCreated.Data!.IdHostel);
+            Assert.True(responseCreated.IsSuccess && responseCreated.Data != null);
+            await hostelService.Delete(responseCreated.Data!.Id);
         }
         [Fact]
         public async Task UpdateHostelInServiceTest()
         {
             // Arrange
-            var hostelService = new HostelService();
-            var hostel = await new TestDataGenerator().GetGenerationHostel();
-            var hostelCreateRequest = new HostelCreateRequest()
-            {
-                CountFloorsHouse = hostel.CountFloorsHouse,
-                LocatedFloorApartament = hostel.LocatedFloorApartament,
-                ConditionHouse = hostel.ConditionHouse,
-                CountBalcony = hostel.CountBalcony,
-                CountRooms = hostel.CountRooms,
-                Description = hostel.Description,
-                District = hostel.District,
-                IdEmployee = hostel.EmployeeId,
-                IsCorner = hostel.IsCorner,
-                KitchenArea = hostel.KitchenArea,
-                LivingSpace = hostel.LivingSpace,
-                Locality = hostel.Locality,
-                MaterialHouse = hostel.MaterialHouse,
-                NumberApartament = hostel.NumberApartament,
-                NumberProperty = hostel.NumberProperty,
-                Price = hostel.Price,
-                Street = hostel.Street,
-                TotalArea = hostel.TotalArea,
-                TypeSale = hostel.TypeSale
-            };
+            IHostelService hostelService = new HostelService();
+            var hostelCreateRequest = await GetHostelCreateRequest();
             var responseCreated = await hostelService.Create(hostelCreateRequest);
-            var hostelChangeRequest = new HostelChangeRequest() 
-            {
-                IdHostel = responseCreated.Data!.IdHostel,
-                CountFloorsHouse = responseCreated.Data!.CountFloorsHouse,
-                LocatedFloorApartament = responseCreated.Data!.LocatedFloorApartament,
-                ConditionHouse = responseCreated.Data!.ConditionHouse,
-                CountBalcony = responseCreated.Data!.CountBalcony,
-                CountRooms = responseCreated.Data!.CountRooms,
-                Description = responseCreated.Data!.Description,
-                District = responseCreated.Data!.District,
-                IdEmployee = responseCreated.Data!.Employee is not null
-                ? responseCreated.Data!.Employee.IdEmployee 
-                : null,
-                IsActual = responseCreated.Data!.IsActual,
-                IsCorner = responseCreated.Data!.IsCorner,
-                KitchenArea = responseCreated.Data!.KitchenArea,
-                LivingSpace = responseCreated.Data!.LivingSpace,
-                Locality = responseCreated.Data!.Locality,
-                MaterialHouse = responseCreated.Data!.MaterialHouse,
-                NumberApartament = responseCreated.Data!.NumberApartament,
-                NumberProperty = responseCreated.Data!.NumberProperty,
-                Price = 11111,
-                Street = responseCreated.Data!.Street,
-                TotalArea = responseCreated.Data!.TotalArea,
-                TypeSale = responseCreated.Data!.TypeSale
-            };
+            var hostelChangeRequest = new HostelChangeRequest(
+                responseCreated.Data!.Id,
+                responseCreated.Data!.CountRooms,
+                responseCreated.Data!.District,
+                responseCreated.Data!.Street,
+                responseCreated.Data!.NumberApartment,
+                responseCreated.Data!.NumberProperty,
+                responseCreated.Data!.ConditionHouse,
+                responseCreated.Data!.LivingSpace,
+                responseCreated.Data!.TotalArea,
+                responseCreated.Data!.KitchenArea,
+                responseCreated.Data!.IsCorner,
+                responseCreated.Data!.CountFloorsHouse,
+                responseCreated.Data!.LocatedFloorApartment,
+                responseCreated.Data!.CountBalcony,
+                responseCreated.Data!.MaterialHouse,
+                responseCreated.Data!.Description,
+                11111,
+                responseCreated.Data!.Employee?.Id,
+                responseCreated.Data!.TypeSale,
+                responseCreated.Data!.Locality,
+                responseCreated.Data!.IsActual);
 
             // Act
-            var reposneUpdated = await hostelService.Change(hostelChangeRequest);
+            var responseChanged = await hostelService.Change(hostelChangeRequest);
 
             // Assert
-            Assert.True(reposneUpdated.IsSuccses
-                && reposneUpdated.Data != null
-                && reposneUpdated.Data.Price == hostelChangeRequest.Price);
-            await hostelService.Delete(reposneUpdated.Data!.IdHostel);
+            Assert.True(responseChanged.IsSuccess
+                && responseChanged.Data != null
+                && responseChanged.Data.Price == hostelChangeRequest.Price);
+            await hostelService.Delete(responseChanged.Data!.Id);
         }
         [Fact]
         public async Task DeleteHostelFromServiceTest()
         {
             // Arrange
-            var hostelService = new HostelService();
-            var hostel = await new TestDataGenerator().GetGenerationHostel();
-            var hostelCreateRequest = new HostelCreateRequest()
-            {
-                CountFloorsHouse = hostel.CountFloorsHouse,
-                LocatedFloorApartament = hostel.LocatedFloorApartament,
-                ConditionHouse = hostel.ConditionHouse,
-                CountBalcony = hostel.CountBalcony,
-                CountRooms = hostel.CountRooms,
-                Description = hostel.Description,
-                District = hostel.District,
-                IdEmployee = hostel.EmployeeId,
-                IsCorner = hostel.IsCorner,
-                KitchenArea = hostel.KitchenArea,
-                LivingSpace = hostel.LivingSpace,
-                Locality = hostel.Locality,
-                MaterialHouse = hostel.MaterialHouse,
-                NumberApartament = hostel.NumberApartament,
-                NumberProperty = hostel.NumberProperty,
-                Price = hostel.Price,
-                Street = hostel.Street,
-                TotalArea = hostel.TotalArea,
-                TypeSale = hostel.TypeSale
-            };
+            IHostelService hostelService = new HostelService();
+            var hostelCreateRequest = await GetHostelCreateRequest();
             var responseCreated = await hostelService.Create(hostelCreateRequest);
 
             // Act
-            var responseDeleted = await hostelService.Delete(responseCreated.Data!.IdHostel);
+            var responseDeleted = await hostelService.Delete(responseCreated.Data!.Id);
 
             // Assert
-            Assert.True(responseDeleted.IsSuccses);
+            Assert.True(responseDeleted.IsSuccess);
         }
     }
 }

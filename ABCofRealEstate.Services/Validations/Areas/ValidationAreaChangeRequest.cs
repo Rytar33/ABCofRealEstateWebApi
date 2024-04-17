@@ -8,7 +8,7 @@ namespace ABCofRealEstate.Services.Validations.Areas
         public static BaseResponse<AreaDetailResponse> GetResultValidation(this AreaChangeRequest areaChangeRequest)
         {
 
-            return new BaseResponse<AreaDetailResponse> { IsSuccses = true };
+            return new BaseResponse<AreaDetailResponse> { IsSuccess = true };
         }
     }
 }

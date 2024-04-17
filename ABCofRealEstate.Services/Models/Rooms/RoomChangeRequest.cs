@@ -1,30 +1,76 @@
-﻿using ABCofRealEstate.Data.Enums;
-
-namespace ABCofRealEstate.Services.Models.Rooms
+﻿namespace ABCofRealEstate.Services.Models.Rooms
 {
     public class RoomChangeRequest
     {
-        public Guid IdRoom { get; set; }
-        public string? District { get; set; }
-        public string? Street { get; set; }
-        public string? Description { get; set; }
-        public int Price { get; set; }
-        public Guid? IdEmployee { get; set; }
-        public EnumLocality Locality { get; set; }
-        public DateTime DateTimePublished { get; set; }
-        public bool IsActual { get; set; } = true;
-        public short CountRooms { get; set; } = 0;
-        public short LocatedFloorApartament { get; set; } = 0;
-        public short CountFloorsHouse { get; set; } = 0;
-        public bool IsCorner { get; set; }
-        public EnumMaterialHouse? MaterialHouse { get; set; }
-        public EnumTypeSale TypeSale { get; set; }
-        public string NumberProperty { get; set; } = null!;
-        public double LivingSpace { get; set; } = 0;
-        public double TotalArea { get; set; } = 0;
-        public double KitchenArea { get; set; } = 0;
-        public EnumConditionHouse? ConditionHouse { get; set; }
-        public short NumberApartament { get; set; }
-        public short CountBalcony { get; set; } = 0;
+        public RoomChangeRequest(
+            Guid id,
+            short countRooms,
+            string? district,
+            string? street,
+            short numberApartment,
+            string numberProperty,
+            EnumConditionHouse? conditionHouse,
+            decimal livingSpace,
+            decimal totalArea,
+            decimal kitchenArea,
+            bool isCorner,
+            short countFloorsHouse,
+            short locatedFloorApartment,
+            short countBalcony,
+            EnumMaterialHouse? materialHouse,
+            string description,
+            int price,
+            Guid? employeeId,
+            EnumTypeSale typeSale,
+            EnumLocality locality,
+            bool isActual)
+        {
+            Id = id;
+            CountRooms = countRooms;
+            District = district;
+            Street = street;
+            NumberProperty = numberProperty;
+            NumberApartment = numberApartment;
+            ConditionHouse = conditionHouse;
+            LivingSpace = livingSpace;
+            TotalArea = totalArea;
+            KitchenArea = kitchenArea;
+            IsCorner = isCorner;
+            CountFloorsHouse = countFloorsHouse;
+            LocatedFloorApartment = locatedFloorApartment;
+            CountBalcony = countBalcony;
+            MaterialHouse = materialHouse;
+            Description = description;
+            Price = price;
+            EmployeeId = employeeId;
+            TypeSale = typeSale;
+            Locality = locality;
+            IsActual = isActual;
+        }
+        public RoomChangeRequest()
+        {
+            
+        }
+        public Guid Id { get; init; }
+        public string? District { get; init; }
+        public string? Street { get; init; }
+        public string? Description { get; init; }
+        public int Price { get; init; }
+        public Guid? EmployeeId { get; init; }
+        public EnumLocality Locality { get; init; }
+        public bool IsActual { get; init; }
+        public short CountRooms { get; init; }
+        public short LocatedFloorApartment { get; init; }
+        public short CountFloorsHouse { get; init; }
+        public bool IsCorner { get; init; }
+        public EnumMaterialHouse? MaterialHouse { get; init; }
+        public EnumTypeSale TypeSale { get; init; }
+        public string NumberProperty { get; init; }
+        public decimal LivingSpace { get; init; }
+        public decimal TotalArea { get; init; }
+        public decimal KitchenArea { get; init; }
+        public EnumConditionHouse? ConditionHouse { get; init; }
+        public short NumberApartment { get; init; }
+        public short CountBalcony { get; init; }
     }
 }

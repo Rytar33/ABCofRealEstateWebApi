@@ -2,8 +2,14 @@
 {
     public class PageResponse
     {
-        public int Page { get; set; }
-        public int PageSize { get; set; }
-        public int Count { get; set; }
+        public PageResponse(int page, int pageSize, int count)
+        {
+            Page = page;
+            PageSize = pageSize;
+            Count = count;
+        }
+        public int Page { get; init; }
+        public int PageSize { get; init; }
+        public int Count { get; init; }
     }
 }

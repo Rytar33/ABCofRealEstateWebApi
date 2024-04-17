@@ -1,55 +1,48 @@
-﻿using ABCofRealEstate.Data.Models;
-using ABCofRealEstate.DataBaseContext;
-using ABCofRealEstate.Services.Models.Employees;
-using ABCofRealEstate.Services.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using ABCofRealEstate.Services.Models.Employees;
+using ABCofRealEstate.Services.Models.Page;
 using ABCofRealEstate.Services.Validations.Employees;
-using ABCofRelEstate.ExportTool;
 
 namespace ABCofRealEstate.Services
 {
-    public class EmployeeService
+    public class EmployeeService : IEmployeeService
     {
         public async Task<BaseResponse<EmployeeDetailResponse>> Create(EmployeeCreateRequest employeeCreateRequest)
         {
             var resultValidation = employeeCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
+            if (resultValidation.IsSuccess == false) return resultValidation;
 
-            var employee = new Employee()
-            {
-                FullName = employeeCreateRequest.FullName,
-                Email = employeeCreateRequest.Email,
-                JobTitle = employeeCreateRequest.JobTitle,
-                NumberPhone = employeeCreateRequest.NumberPhone
-            };
-            using var db = new RealEstateDataContext();
+            var employee = new Employee(
+                employeeCreateRequest.Email,
+                employeeCreateRequest.FullName,
+                employeeCreateRequest.JobTitle,
+                employeeCreateRequest.NumberPhone);
+            await using var db = new RealEstateDataContext();
             await db.Employee.AddAsync(employee);
             await db.SaveChangesAsync();
             if (employeeCreateRequest.File != null)
-                await new ExportJpgService()
-                .ImportSingleFile(
-                $"~/Files/Img/Team/{employee.Id}",
+                await ExportImageService.ImportSingleFile(
+                $"wwwroot/image/team/{employee.Id}",
                 employeeCreateRequest.File);
             return await Get(employee.Id);
         }
-        public async Task<BaseResponse<EmployeeDetailResponse>> Change(EmployeeChangeRequest employeeChangeRequest)
+        public async Task<BaseResponse<EmployeeDetailResponse>> Change(EmployeeChangeRequest apartmentChangeRequest)
         {
-            var resultValidation = employeeChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            using var db = new RealEstateDataContext();
-            if(!await db.Employee.AnyAsync(e => e.Id == employeeChangeRequest.IdEmployee))
-                return new BaseResponse<EmployeeDetailResponse>() 
+            var resultValidation = apartmentChangeRequest.GetResultValidation();
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            await using var db = new RealEstateDataContext();
+            if(!await db.Employee.AnyAsync(e => e.Id == apartmentChangeRequest.Id))
+                return new BaseResponse<EmployeeDetailResponse>
                 {
-                    IsSuccses = false,
+                    IsSuccess = false,
                     ErrorMessage = "Такого работника не было найденно"
                 };
-            var employee = new Employee()
+            var employee = new Employee(
+                apartmentChangeRequest.Email,
+                apartmentChangeRequest.FullName,
+                apartmentChangeRequest.JobTitle,
+                apartmentChangeRequest.NumberPhone)
             {
-                Id = employeeChangeRequest.IdEmployee,
-                FullName = employeeChangeRequest.FullName,
-                Email = employeeChangeRequest.Email,
-                JobTitle = employeeChangeRequest.JobTitle,
-                NumberPhone = employeeChangeRequest.NumberPhone
+                Id = apartmentChangeRequest.Id
             };
             db.Employee.Update(employee);
             await db.SaveChangesAsync();
@@ -57,59 +50,99 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<EmployeeDetailResponse>> Get(Guid id)
         {
-            using var db = new RealEstateDataContext();
+            await using var db = new RealEstateDataContext();
             var employee = await db.Employee.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
             if (employee == null)
-                return new BaseResponse<EmployeeDetailResponse>() { IsSuccses = false, ErrorMessage = "Работник не был найден" };
-            string? fullPath = new ExportJpgService().ExportFullPathJpg($"~/Files/Img/Team/{employee.Id}");
-            return new BaseResponse<EmployeeDetailResponse>()
-            {
-                IsSuccses = true,
-                Data = new EmployeeDetailResponse()
+                return new BaseResponse<EmployeeDetailResponse>
                 {
-                    FullPathFile = fullPath,
-                    IdEmployee = employee.Id,
-                    FullName = employee.FullName,
-                    Email = employee.Email,
-                    JobTitle = employee.JobTitle,
-                    NumberPhone = employee.NumberPhone
-                }
+                    IsSuccess = false,
+                    ErrorMessage = "Работник не был найден"
+                };
+            var fullPath = ExportImageService.ExportFullPathImage($"wwwroot/images/team/{employee.Id}");
+            return new BaseResponse<EmployeeDetailResponse>
+            {
+                IsSuccess = true,
+                Data = new EmployeeDetailResponse(
+                    fullPath,
+                    employee.Id,
+                    employee.Email,
+                    employee.FullName,
+                    employee.JobTitle,
+                    employee.NumberPhone)
             };
         }
-        public async Task<BaseResponse<List<EmployeeDetailResponse>>> GetAllEmployees()
+        public async Task<BaseResponse<EmployeeListResponse>> GetPage(EmployeeListRequest employeeListRequest)
         {
-            using var db = new RealEstateDataContext();
-            var employees = await db.Employee.ToListAsync();
+            await using var db = new RealEstateDataContext();
+            var employees = db.Employee;
             if (!employees.Any())
-                return new BaseResponse<List<EmployeeDetailResponse>>()
+                return new BaseResponse<EmployeeListResponse>
                 {
-                    IsSuccses = false,
+                    IsSuccess = false,
                     ErrorMessage = "Работников не было найдено"
                 };
-            return new BaseResponse<List<EmployeeDetailResponse>>()
+            var employeesQueryable = employees.AsQueryable();
+            var countEmployees = employeesQueryable.Count();
+            
+            employeesQueryable = employeesQueryable
+                .Skip((employeeListRequest.Page!.Page - 1) * employeeListRequest.Page.PageSize)
+                .Take(employeeListRequest.Page.PageSize);
+            return new BaseResponse<EmployeeListResponse>
             {
-                IsSuccses = true,
-                Data = employees.Select(e => 
-                new EmployeeDetailResponse() 
-                {
-                    IdEmployee = e.Id,
-                    FullName = e.FullName,
-                    Email = e.Email,
-                    JobTitle = e.JobTitle,
-                    NumberPhone = e.NumberPhone
-                })
-                .ToList()
+                IsSuccess = true,
+                Data = new EmployeeListResponse(
+                    employeesQueryable.Select(e => 
+                        new EmployeeListItem(
+                            ExportImageService.ExportFullPathImage($"wwwroot/images/team/{e.Id}") ??
+                            ExportImageService.ExportFullPathImage("wwwroot/images/team"),
+                            e.Id,
+                            e.Email,
+                            e.FullName,
+                            e.JobTitle,
+                            e.NumberPhone)).ToList(),
+                    new PageResponse(
+                        employeeListRequest.Page.Page,
+                        employeeListRequest.Page.PageSize,
+                        countEmployees))
             };
         }
         public async Task<BaseResponse<EmployeeDetailResponse>> Delete(Guid id)
         {
-            using var db = new RealEstateDataContext();
-            var employee = await db.Employee.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            await using var db = new RealEstateDataContext();
+            var employee = await db.Employee
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id);
             if (employee == null)
-                return new BaseResponse<EmployeeDetailResponse>() { IsSuccses = false, ErrorMessage = "Работник не был найден" };
+                return new BaseResponse<EmployeeDetailResponse>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Работник не был найден"
+                };
+            await db.Apartment
+                .Where(a => a.EmployeeId == id)
+                .ExecuteUpdateAsync(a => a.SetProperty(sa => sa.EmployeeId, sa=> null));
+            await db.Area
+                .Where(a => a.EmployeeId == id)
+                .ExecuteUpdateAsync(a => a.SetProperty(sa => sa.EmployeeId, sa=> null));
+            await db.Comertion
+                .Where(c => c.EmployeeId == id)
+                .ExecuteUpdateAsync(c => c.SetProperty(sc => sc.EmployeeId, sc=> null));
+            await db.Garage
+                .Where(g => g.EmployeeId == id)
+                .ExecuteUpdateAsync(g => g.SetProperty(sg => sg.EmployeeId, sg=> null));
+            await db.Hostel
+                .Where(h => h.EmployeeId == id)
+                .ExecuteUpdateAsync(h => h.SetProperty(sh => sh.EmployeeId, sh=> null));
+            await db.House
+                .Where(h => h.EmployeeId == id)
+                .ExecuteUpdateAsync(h => h.SetProperty(sh => sh.EmployeeId, sh=> null));
+            await db.Room
+                .Where(r => r.EmployeeId == id)
+                .ExecuteUpdateAsync(r => r.SetProperty(sr => sr.EmployeeId, sr=> null));
             db.Employee.Remove(employee);
             await db.SaveChangesAsync();
-            return new BaseResponse<EmployeeDetailResponse>() { IsSuccses = true };
+            ExportImageService.RemovePathWithFiles($"wwwroot/images/team/{id}");
+            return new BaseResponse<EmployeeDetailResponse> { IsSuccess = true };
         }
     }
 }

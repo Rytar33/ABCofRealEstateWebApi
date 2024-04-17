@@ -8,7 +8,7 @@ namespace ABCofRealEstate.Services.Validations.Employees
         public static BaseResponse<EmployeeDetailResponse> GetResultValidation(this EmployeeCreateRequest employeeCreateRequest)
         {
 
-            return new BaseResponse<EmployeeDetailResponse> { IsSuccses = true };
+            return new BaseResponse<EmployeeDetailResponse> { IsSuccess = true };
         }
     }
 }

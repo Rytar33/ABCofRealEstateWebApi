@@ -4,7 +4,14 @@ namespace ABCofRealEstate.Services.Models.Moderators
 {
     public class ModeratorListResponse
     {
-        public IEnumerable<ModeratorListItem> Items { get; set; }
-        public PageResponse? Page { get; set; }
+        public ModeratorListResponse(
+            IEnumerable<ModeratorListItem> items,
+            PageResponse? page)
+        {
+            Items = items;
+            Page = page;
+        }
+        public IEnumerable<ModeratorListItem> Items { get; init; }
+        public PageResponse? Page { get; init; }
     }
 }

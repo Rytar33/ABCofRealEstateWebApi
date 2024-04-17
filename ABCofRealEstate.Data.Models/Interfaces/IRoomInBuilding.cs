@@ -4,8 +4,8 @@
     public interface IRoomInBuilding : IBuilding, IResidentialProperty
     {
         /// <summary> Номер квартиры </summary>
-        public short NumberApartament { get; set; }
+        public short NumberApartment { get; init; }
         /// <summary> Количество балконов </summary>
-        public short CountBalcony { get; set; }
+        public short CountBalcony { get; init; }
     }
 }

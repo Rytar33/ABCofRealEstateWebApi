@@ -1,0 +1,51 @@
+@model SourceRealEstateObjectListResponse
+@using ABCofRealEstate.Data.Enums
+@using ABCofRealEstate.Services.Models.SourceRealEstateObjects
+@{
+    ViewBag.Title = "Page";
+}
+<h2>Filter</h2>
+<form method="get">
+    <p>
+        <select name="Locality">
+            <option selected value>--</option>
+            @foreach (var enumLocality in Enum.GetNames(typeof(EnumLocality)))
+            {
+                <option value="@enumLocality">@enumLocality</option>
+            }
+        </select>
+    </p>
+    <p>
+        <select name="TypeObject">
+            <option selected value>--</option>
+            @foreach (var enumObject in Enum.GetNames(typeof(EnumObject)))
+            {
+                <option value="@enumObject">@enumObject</option>
+            }
+        </select>
+    </p>
+    <p>
+        PageNumber
+        <input type="number" name="Page.Page" value="@Model.Page!.Page">
+    </p>
+    <p>
+        PageSize
+        <input type="number" name="Page.PageSize" value="@Model.Page.PageSize">
+    </p>
+    <button type="submit">Request</button>
+</form>
+<hr/>
+@foreach (var item in Model.Items)
+{
+    <div>
+        @if (item.ImagePath != null)
+        {
+            <img src="@item.ImagePath" height="150"/><br/>
+        }
+        <p>Price: @item.Price $</p>
+        <p>Locality: @item.Locality</p>
+        <p>DateTimePublished: @item.ImportantInformation</p>
+        <a href="@item.TypeObject?id=@item.IdRealEstateObject">Подробнее</a>
+    </div>
+    <hr/>
+}

@@ -1,225 +1,170 @@
-﻿using ABCofRealEstate.Data.Enums;
-using ABCofRealEstate.Data.Models;
-using ABCofRealEstate.Services.Extensions;
+﻿ using ABCofRealEstate.Services.Extensions;
 using Bogus;
 
 namespace ABCofRealEstate.Services
 {
-    public class TestDataGenerator
+    public class TestDataGenerator : ITestDataGenerator
     {
-        private Faker _faker = new Faker("ru");
-        public async Task<Apartament> GetGenerationApartament()
+        private readonly Faker _faker = new("ru");
+
+        private static async Task<Employee?> GetFirstEmployee()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            var apartament = new Apartament()
-            {
-                CountFloorsHouse = (short)_faker.Random.Number(4, 25),
-                LocatedFloorApartament = (short)_faker.Random.Number(1, 4),
-                ConditionHouse = _faker.PickRandom<EnumConditionHouse>(),
-                CountBalcony = (short)_faker.Random.Number(2),
-                CountRooms = (short)_faker.Random.Number(1, 4),
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                MaterialHouse = _faker.PickRandom<EnumMaterialHouse>(),
-                NumberApartament = (short)_faker.Random.Number(1, 60),
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                TotalArea = _faker.Random.Double(25, 150),
-                LivingSpace = _faker.Random.Double(10, 100),
-                KitchenArea = _faker.Random.Double(0, 50),
-                NumberProperty = _faker.Address.BuildingNumber(),
-                IsActual = true,
-                IsCorner = _faker.Random.Bool(),
-                Locality = _faker.PickRandom<EnumLocality>(),
-                EmployeeId = 
-                employees.Data != null 
-                && employees.Data!.Any() 
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee 
-                : null
-            };
-            return apartament;
+            await using var db = new RealEstateDataContext();
+            return await db.Employee.FirstOrDefaultAsync();
+        }
+        public async Task<Apartment> GetGenerationApartment()
+        {
+            var employee = await GetFirstEmployee();
+            return new Apartment(
+                _faker.Random.Short(1, 4),
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                _faker.Random.Short(1, 60),
+                _faker.Address.BuildingNumber(),
+                _faker.PickRandom<EnumConditionHouse>(),
+                _faker.Random.Decimal(10, 100),
+                _faker.Random.Decimal(25, 150),
+                _faker.Random.Decimal(0, 50),
+                _faker.Random.Short(4, 25),
+                _faker.Random.Short(1, 4),
+                _faker.Random.Bool(),
+                _faker.Random.Short(2),
+                _faker.PickRandom<EnumMaterialHouse>(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>());
         }
         public async Task<Area> GetGenerationArea()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Area()
-            {
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                IsActual = true,
-                Locality = _faker.PickRandom<EnumLocality>(),
-                LandArea = _faker.Random.Number(50, 1000),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new Area(
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Number(50, 1000));
         }
-        public async Task<Commertion> GetGenerationCommertion()
+        public async Task<Comertion> GetGenerationComertion()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Commertion()
-            {
-                CountFloorsHouse = (short)_faker.Random.Number(4, 25),
-                LocatedFloorApartament = (short)_faker.Random.Number(1, 4),
-                CountRooms = (short)_faker.Random.Number(1, 4),
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                MaterialHouse = _faker.PickRandom<EnumMaterialHouse>(),
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                NumberProperty = _faker.Address.BuildingNumber(),
-                IsActual = true,
-                IsCorner = _faker.Random.Bool(),
-                Locality = _faker.PickRandom<EnumLocality>(),
-                RoomArea = _faker.Random.Double(30, 500),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new Comertion(
+                _faker.Random.Short(1, 4),
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                _faker.Address.BuildingNumber(),
+                _faker.Random.Short(4, 25),
+                _faker.Random.Short(1, 4),
+                _faker.PickRandom<EnumMaterialHouse>(),
+                _faker.Random.Decimal(30, 500),
+                _faker.Random.Bool(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>());
         }
         public async Task<Garage> GetGenerationGarage()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Garage()
-            {
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                IsActual = true,
-                Locality = _faker.PickRandom<EnumLocality>(),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new Garage(
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>());
         }
         public async Task<Hostel> GetGenerationHostel()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Hostel()
-            {
-                CountFloorsHouse = (short)_faker.Random.Number(4, 25),
-                LocatedFloorApartament = (short)_faker.Random.Number(1, 4),
-                ConditionHouse = _faker.PickRandom<EnumConditionHouse>(),
-                CountBalcony = (short)_faker.Random.Number(2),
-                CountRooms = (short)_faker.Random.Number(1, 4),
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                MaterialHouse = _faker.PickRandom<EnumMaterialHouse>(),
-                NumberApartament = (short)_faker.Random.Number(1, 60),
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                TotalArea = _faker.Random.Double(25, 150),
-                LivingSpace = _faker.Random.Double(10, 100),
-                KitchenArea = _faker.Random.Double(0, 50),
-                NumberProperty = _faker.Address.BuildingNumber(),
-                IsActual = true,
-                IsCorner = _faker.Random.Bool(),
-                Locality = _faker.PickRandom<EnumLocality>(),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new Hostel(
+                _faker.Random.Short(1, 4),
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                _faker.Random.Short(1, 60),
+                _faker.Address.BuildingNumber(),
+                _faker.PickRandom<EnumConditionHouse>(),
+                _faker.Random.Decimal(10, 100),
+                _faker.Random.Decimal(25, 150),
+                _faker.Random.Decimal(0, 50),
+                _faker.Random.Bool(),
+                _faker.Random.Short(4, 25),
+                _faker.Random.Short(1, 4),
+                _faker.Random.Short(2),
+                _faker.PickRandom<EnumMaterialHouse>(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>());
         }
-        public async Task<Room> GetGenerationHouse()
+        public async Task<House> GetGenerationHouse()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Room()
-            {
-                CountFloorsHouse = (short)_faker.Random.Number(4, 25),
-                LocatedFloorApartament = (short)_faker.Random.Number(1, 4),
-                ConditionHouse = _faker.PickRandom<EnumConditionHouse>(),
-                CountBalcony = (short)_faker.Random.Number(2),
-                CountRooms = (short)_faker.Random.Number(1, 4),
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                MaterialHouse = _faker.PickRandom<EnumMaterialHouse>(),
-                NumberApartament = (short)_faker.Random.Number(1, 60),
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                TotalArea = _faker.Random.Double(25, 150),
-                LivingSpace = _faker.Random.Double(10, 100),
-                KitchenArea = _faker.Random.Double(0, 50),
-                NumberProperty = _faker.Address.BuildingNumber(),
-                IsActual = true,
-                IsCorner = _faker.Random.Bool(),
-                Locality = _faker.PickRandom<EnumLocality>(),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new House(
+                _faker.Random.Short(1, 4),
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                _faker.Address.BuildingNumber(),
+                _faker.PickRandom<EnumConditionHouse>(),
+                _faker.Random.Decimal(10, 100),
+                _faker.Random.Decimal(25, 150),
+                _faker.Random.Decimal(0, 50),
+                _faker.Random.Short(1, 3),
+                1,
+                _faker.Random.Bool(),
+                _faker.PickRandom<EnumMaterialHouse>(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Decimal(10, 150),
+                _faker.Random.Decimal(100, 2000));
         }
         public async Task<Room> GetGenerationRoom()
         {
-            var employees = await new EmployeeService().GetAllEmployees();
-            return new Room()
-            {
-                CountFloorsHouse = (short)_faker.Random.Number(4, 25),
-                LocatedFloorApartament = (short)_faker.Random.Number(1, 4),
-                ConditionHouse = _faker.PickRandom<EnumConditionHouse>(),
-                CountBalcony = (short)_faker.Random.Number(2),
-                CountRooms = (short)_faker.Random.Number(1, 4),
-                Price = _faker.Random.Number(50000, 500000),
-                DateTimePublished = DateTime.Now,
-                District = _faker.Address.State(),
-                Street = _faker.Address.StreetName(),
-                Description = "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
-                MaterialHouse = _faker.PickRandom<EnumMaterialHouse>(),
-                NumberApartament = (short)_faker.Random.Number(1, 60),
-                TypeSale = _faker.PickRandom<EnumTypeSale>(),
-                TotalArea = _faker.Random.Double(25, 150),
-                LivingSpace = _faker.Random.Double(10, 100),
-                KitchenArea = _faker.Random.Double(0, 50),
-                NumberProperty = _faker.Address.BuildingNumber(),
-                IsActual = true,
-                IsCorner = _faker.Random.Bool(),
-                Locality = _faker.PickRandom<EnumLocality>(),
-                EmployeeId =
-                employees.Data != null
-                && employees.Data!.Any()
-                ? employees.Data![_faker.Random.Number(employees.Data!.Count - 1)].IdEmployee
-                : null
-            };
+            var employee = await GetFirstEmployee();
+            return new Room(
+                _faker.Random.Short(1, 4),
+                _faker.Address.State(),
+                _faker.Address.StreetName(),
+                _faker.Random.Short(1, 60),
+                _faker.Address.BuildingNumber(),
+                _faker.PickRandom<EnumConditionHouse>(),
+                _faker.Random.Decimal(10, 100),
+                _faker.Random.Decimal(25, 150),
+                _faker.Random.Decimal(0, 50),
+                _faker.Random.Bool(),
+                _faker.Random.Short(4, 25),
+                _faker.Random.Short(1, 4),
+                _faker.Random.Short(2),
+                _faker.PickRandom<EnumMaterialHouse>(),
+                "lorem ispum dorem viktorian selem fszxc twerw fsfas qeee 12 333 fsdf.",
+                _faker.Random.Number(50000, 500000),
+                employee?.Id,
+                _faker.PickRandom<EnumTypeSale>(),
+                _faker.PickRandom<EnumLocality>());
         }
         public Employee GetGenerationEmployee()
-            => new Employee()
-            {
-                FullName = _faker.Person.FullName,
-                Email = _faker.Person.Email,
-                JobTitle = _faker.PickRandom<EnumJobTitleEmployee>(),
-                NumberPhone = _faker.Random.ReplaceNumbers("####-####-###")
-            };
+            => new(
+                _faker.Person.Email,
+                _faker.Person.FullName,
+                _faker.PickRandom<EnumJobTitleEmployee>(),
+                _faker.Random.ReplaceNumbers("+373 ### ### ##"));
         public Moderator GetGenerationModerator()
-            => new Moderator()
+            => new(
+                _faker.Name.FirstName(),
+                _faker.Person.Email,
+                "qwerty123".GetSha256(),
+                _faker.PickRandom<EnumAccessLevel>())
             {
-                Name = _faker.Name.FirstName(),
-                Email = _faker.Person.Email,
-                Password = "qwerty123".GetSha256(),
-                AccessLevel = _faker.PickRandom<EnumAccessLevel>(),
                 IsSuperModerator = _faker.Random.Bool()
             };
         

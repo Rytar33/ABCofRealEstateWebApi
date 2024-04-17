@@ -1,12 +1,25 @@
-﻿using ABCofRealEstate.Data.Enums;
-
-namespace ABCofRealEstate.Services.Models.Moderators
+﻿namespace ABCofRealEstate.Services.Models.Moderators
 {
     public class ModeratorCreateRequest
     {
-        public string Name { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
-        public EnumAccessLevel AccessLevel { get; set; }
+        public ModeratorCreateRequest(
+            string name,
+            string email,
+            string password,
+            EnumAccessLevel accessLevel)
+        {
+            Name = name;
+            Email = email;
+            Password = password;
+            AccessLevel = accessLevel;
+        }
+        public ModeratorCreateRequest()
+        {
+            
+        }
+        public string Name { get; init; }
+        public string Email { get; init; }
+        public string Password { get; init; }
+        public EnumAccessLevel AccessLevel { get; init; }
     }
 }

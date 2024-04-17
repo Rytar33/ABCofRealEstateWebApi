@@ -1,0 +1,9 @@
+@model ABCofRealEstate.Services.Models.Hostels.HostelDetailResponse
+@{
+    ViewBag.Title = "Hostel";
+}
+@if (Model.Employee != null)
+{
+    <hr>
+    @await Html.PartialAsync("~/Views/ABCofRealEstate/Team/Get.cshtml", Model.Employee)
+}

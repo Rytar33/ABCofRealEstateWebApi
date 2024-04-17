@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Services;
+using ABCofRealEstate.Services.Interfaces;
 using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,11 @@ namespace ABCofRealEstate.WebApi.Controllers
     public class PageController : Controller
     {
         [HttpGet]
-        public async Task<IActionResult> GetPage([FromQuery]SourceRealEstateObjectListRequest sourceRealEstateObject)
+        public async Task<IActionResult> GetPage([FromQuery] SourceRealEstateObjectListRequest sourceRealEstateObject)
         {
-            SourceRealEstateObjectService sourceRealEstateObjectService = new SourceRealEstateObjectService();
-            return Ok(await sourceRealEstateObjectService.GetList(sourceRealEstateObject));
+            ISourceRealEstateObjectService sourceRealEstateObjectService = new SourceRealEstateObjectService();
+            var pageResponse = await sourceRealEstateObjectService.GetPage(sourceRealEstateObject);
+            return View("~/Views/ABCofRealEstate/Page/GetPage.cshtml", pageResponse.Data);
         }
     }
 }

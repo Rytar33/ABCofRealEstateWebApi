@@ -1,27 +1,26 @@
-﻿using ABCofRealEstate.Data.Models;
-using ABCofRealEstate.DataBaseContext;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using ABCofRealEstate.Services.Extensions;
-using ABCofRealEstate.Services.Models;
 using ABCofRealEstate.Services.Models.Moderators;
+using ABCofRealEstate.Services.Models.Page;
 using ABCofRealEstate.Services.Validations.Moderators;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ABCofRealEstate.Services
 {
-    public class ModeratorService
+    public class ModeratorService : IModeratorService
     {
         public async Task<BaseResponse<ModeratorDetailResponse>> Create(ModeratorCreateRequest moderatorCreateRequest)
         {
             var resultValidation = moderatorCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            var moderator = new Moderator()
-            {
-                Name = moderatorCreateRequest.Name,
-                Email = moderatorCreateRequest.Email,
-                Password = moderatorCreateRequest.Password.GetSha256(),
-                AccessLevel = moderatorCreateRequest.AccessLevel
-            };
-            using var db = new RealEstateDataContext();
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            var moderator = new Moderator(
+                moderatorCreateRequest.Name,
+                moderatorCreateRequest.Email,
+                moderatorCreateRequest.Password,
+                moderatorCreateRequest.AccessLevel);
+            await using var db = new RealEstateDataContext();
             await db.Moderator.AddAsync(moderator);
             await db.SaveChangesAsync();
             return await Get(moderator.Id);
@@ -29,56 +28,146 @@ namespace ABCofRealEstate.Services
         public async Task<BaseResponse<ModeratorDetailResponse>> Change(ModeratorChangeRequest moderatorChangeRequest)
         {
             var resultValidation = moderatorChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            using var db = new RealEstateDataContext();
-            if (!await db.Moderator.AnyAsync(m => m.Id == moderatorChangeRequest.IdModerator))
-                return new BaseResponse<ModeratorDetailResponse>()
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            await using var db = new RealEstateDataContext();
+            var moderatorGet = await db.Moderator.AsNoTracking().FirstOrDefaultAsync(m => m.Id == moderatorChangeRequest.Id);
+            if (moderatorGet == null)
+                return new BaseResponse<ModeratorDetailResponse>
                 {
-                    IsSuccses = false,
+                    IsSuccess = false,
                     ErrorMessage = "Такого модератора не было найдено"
                 };
-            var moderator = new Moderator()
+            var moderator = new Moderator(
+                moderatorChangeRequest.Name,
+                moderatorChangeRequest.Email,
+                moderatorGet.Password,
+                moderatorChangeRequest.AccessLevel)
             {
-                Id = moderatorChangeRequest.IdModerator,
-                Name = moderatorChangeRequest.Name,
-                Email = moderatorChangeRequest.Email,
-                Password = moderatorChangeRequest.Password.GetSha256(),
-                AccessLevel = moderatorChangeRequest.AccessLevel,
+                Id = moderatorChangeRequest.Id,
                 IsSuperModerator = moderatorChangeRequest.IsSuperModerator
             };
             db.Moderator.Update(moderator);
             await db.SaveChangesAsync();
             return await Get(moderator.Id);
         }
+
+        public async Task<BaseResponse<ModeratorLogInResponse>> LogIn(ModeratorAuthenticationRequest moderatorAuthenticationRequest)
+        {
+            await using var db = new RealEstateDataContext();
+            var moderator = await db.Moderator
+                .FirstOrDefaultAsync(m => 
+                    (m.Email == moderatorAuthenticationRequest.EmailOrName 
+                    || m.Name == moderatorAuthenticationRequest.EmailOrName) 
+                    & m.Password == moderatorAuthenticationRequest.Password.GetSha256());
+            if (moderator == null)
+                return new BaseResponse<ModeratorLogInResponse>()
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Ошибка аунтефикации, неправильнно введены логин и/или пароль"
+                };
+            string key = "mysupersecret_secretsecretsecretkey!123";
+            var jwt = new JwtSecurityToken(
+                issuer: "MyAuthServer",
+                audience: "MyAuthClient",
+                claims: new List<Claim>(){new Claim(ClaimTypes.Name, moderator.Email)},
+                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256));
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+            return new BaseResponse<ModeratorLogInResponse>()
+            {
+                IsSuccess = true,
+                Data = new ModeratorLogInResponse(
+                    jwtToken,
+                    moderator.Id,
+                    moderator.Name,
+                    moderator.Email,
+                    moderator.AccessLevel,
+                    moderator.IsSuperModerator)
+            };
+
+        }
         public async Task<BaseResponse<ModeratorDetailResponse>> Get(Guid id)
         {
-            using var db = new RealEstateDataContext();
-            var moderator = await db.Moderator.FirstOrDefaultAsync(m => m.Id == id);
+            await using var db = new RealEstateDataContext();
+            var moderator = await db.Moderator.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             if (moderator == null)
-                return new BaseResponse<ModeratorDetailResponse>() { IsSuccses = false, ErrorMessage = "Дом не был найден" };
-            return new BaseResponse<ModeratorDetailResponse>()
-            {
-                IsSuccses = true,
-                Data = new ModeratorDetailResponse()
+                return new BaseResponse<ModeratorDetailResponse>
                 {
-                    IdModerator = moderator.Id,
-                    Name = moderator.Name,
-                    Email = moderator.Email,
-                    AccessLevel = moderator.AccessLevel,
-                    IsSuperModerator= moderator.IsSuperModerator
-                }
+                    IsSuccess = false,
+                    ErrorMessage = "Модератор не был найден"
+                };
+            return new BaseResponse<ModeratorDetailResponse>
+            {
+                IsSuccess = true,
+                Data = new ModeratorDetailResponse(
+                    moderator.Id,
+                    moderator.Name,
+                    moderator.Email,
+                    moderator.AccessLevel,
+                    moderator.IsSuperModerator)
             };
         }
 
+        public async Task<BaseResponse<ModeratorListResponse>> GetPage(ModeratorListRequest moderatorListRequest)
+        {
+            await using var db = new RealEstateDataContext();
+            var moderators = await db.Moderator.ToListAsync();
+            if (!moderators.Any())
+                return new BaseResponse<ModeratorListResponse>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Модераторов не было найденно"
+                };
+            var moderatorsQueryable = moderators.AsQueryable();
+            
+            if (moderatorListRequest.Search != null)
+                moderatorsQueryable = moderatorsQueryable
+                    .Where(m =>
+                        m.Name.Contains(moderatorListRequest.Search)
+                        || m.Email.Contains(moderatorListRequest.Search));
+            if (moderatorListRequest.AccessLevel != null)
+                moderatorsQueryable = moderatorsQueryable
+                    .Where(m => m.AccessLevel == moderatorListRequest.AccessLevel);
+            if (moderatorListRequest.IsSuperModerator != null)
+                moderatorsQueryable = moderatorsQueryable
+                    .Where(m => m.IsSuperModerator == moderatorListRequest.IsSuperModerator);
+            
+            var countModerators = moderatorsQueryable.Count();
+            moderatorsQueryable = moderatorsQueryable
+                .Skip((moderatorListRequest.Page!.Page - 1) * moderatorListRequest.Page!.PageSize)
+                .Take(moderatorListRequest.Page!.PageSize);
+            
+            return new BaseResponse<ModeratorListResponse>()
+            {
+                IsSuccess = true,
+                Data = new ModeratorListResponse(
+                    moderatorsQueryable.Select(m => 
+                            new ModeratorListItem(
+                                m.Id,
+                                m.Name,
+                                m.Email,
+                                m.AccessLevel,
+                                m.IsSuperModerator))
+                        .AsEnumerable(),
+                    new PageResponse(
+                        moderatorListRequest.Page.Page,
+                        moderatorListRequest.Page.PageSize,
+                        countModerators))
+            };
+        }
         public async Task<BaseResponse<ModeratorDetailResponse>> Delete(Guid id)
         {
-            using var db = new RealEstateDataContext();
-            var moderator = await db.Moderator.FirstOrDefaultAsync(m => m.Id == id);
+            await using var db = new RealEstateDataContext();
+            var moderator = await db.Moderator.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
             if (moderator == null)
-                return new BaseResponse<ModeratorDetailResponse>() { IsSuccses = false, ErrorMessage = "Модератор не был найден" };
+                return new BaseResponse<ModeratorDetailResponse> 
+                    { 
+                        IsSuccess = false, 
+                        ErrorMessage = "Модератор не был найден"
+                    };
             db.Moderator.Remove(moderator);
             await db.SaveChangesAsync();
-            return new BaseResponse<ModeratorDetailResponse>() { IsSuccses = true };
+            return new BaseResponse<ModeratorDetailResponse> { IsSuccess = true };
         }
     }
 }

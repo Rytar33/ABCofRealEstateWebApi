@@ -1,13 +1,27 @@
-﻿using ABCofRealEstate.Data.Enums;
-using ABCofRealEstate.Services.Models.Page;
+﻿using ABCofRealEstate.Services.Models.Page;
 
 namespace ABCofRealEstate.Services.Models.Moderators
 {
     public class ModeratorListRequest
     {
-        public string? Search { get; set; }
-        public bool? IsSuperModerator { get; set; }
-        public EnumAccessLevel? AccessLevel { get; set; }
-        public PageRequest? Page { get; set; }
+        public ModeratorListRequest(
+            string? search,
+            bool? isSuperModerator,
+            EnumAccessLevel? accessLevel,
+            PageRequest? page)
+        {
+            Search = search;
+            IsSuperModerator = isSuperModerator;
+            AccessLevel = accessLevel;
+            Page = page ?? new PageRequest();
+        }
+        public ModeratorListRequest()
+        {
+            Page ??= new PageRequest();
+        }
+        public string? Search { get; init; }
+        public bool? IsSuperModerator { get; init; }
+        public EnumAccessLevel? AccessLevel { get; init; }
+        public PageRequest? Page { get; init; }
     }
 }

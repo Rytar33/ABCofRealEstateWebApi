@@ -1,106 +1,88 @@
-﻿using ABCofRealEstate.Data.Models;
-using ABCofRealEstate.DataBaseContext;
-using ABCofRealEstate.Services.Models.Hostels;
-using ABCofRealEstate.Services.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using ABCofRealEstate.Services.Models.Hostels;
 using ABCofRealEstate.Services.Validations.Hostels;
-using ABCofRealEstate.Data.Enums;
-using ABCofRelEstate.ExportTool;
-using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
 
 namespace ABCofRealEstate.Services
 {
-    public class HostelService
+    public class HostelService : IHostelService
     {
         public async Task<BaseResponse<HostelDetailResponse>> Create(HostelCreateRequest hostelCreateRequest)
         {
             var resultValidation = hostelCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            BaseResponse<SourceRealEstateObject>? resultResponse = null;
-            if (hostelCreateRequest.SourceRealEstateObjectId is null)
-            {
-                resultResponse = await new SourceRealEstateObjectService()
-                .Add(new SourceRealEstateObjectCreateRequest()
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            var resultResponse = await new SourceRealEstateObjectService()
+                .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Hostel));
+            if (resultResponse.IsSuccess == false)
+                return new BaseResponse<HostelDetailResponse>
                 {
-                    NameObject = EnumObject.Hostel
-                });
-                if (resultResponse != null && resultResponse.IsSuccses == false)
-                    return new BaseResponse<HostelDetailResponse>()
-                    {
-                        IsSuccses = resultResponse.IsSuccses,
-                        ErrorMessage = resultResponse.ErrorMessage
-                    };
-            }
-            var hostel = new Hostel()
+                    IsSuccess = resultResponse.IsSuccess,
+                    ErrorMessage = resultResponse.ErrorMessage
+                };
+            var hostel = new Hostel(
+                hostelCreateRequest.CountRooms,
+                hostelCreateRequest.District,
+                hostelCreateRequest.Street,
+                hostelCreateRequest.NumberApartment,
+                hostelCreateRequest.NumberProperty,
+                hostelCreateRequest.ConditionHouse,
+                hostelCreateRequest.LivingSpace,
+                hostelCreateRequest.TotalArea,
+                hostelCreateRequest.KitchenArea,
+                hostelCreateRequest.IsCorner,
+                hostelCreateRequest.CountFloorsHouse,
+                hostelCreateRequest.LocatedFloorApartment,
+                hostelCreateRequest.CountBalcony,
+                hostelCreateRequest.MaterialHouse,
+                hostelCreateRequest.Description,
+                hostelCreateRequest.Price,
+                hostelCreateRequest.EmployeeId,
+                hostelCreateRequest.TypeSale,
+                hostelCreateRequest.Locality)
             {
-                CountRooms = hostelCreateRequest.CountRooms,
-                CountFloorsHouse = hostelCreateRequest.CountFloorsHouse,
-                LocatedFloorApartament = hostelCreateRequest.LocatedFloorApartament,
-                ConditionHouse = hostelCreateRequest.ConditionHouse,
-                Description = hostelCreateRequest.Description,
-                CountBalcony = hostelCreateRequest.CountBalcony,
-                District = hostelCreateRequest.District,
-                Street = hostelCreateRequest.Street,
-                EmployeeId = hostelCreateRequest.IdEmployee,
-                TypeSale = hostelCreateRequest.TypeSale,
-                TotalArea = hostelCreateRequest.TotalArea,
-                IsCorner = hostelCreateRequest.IsCorner,
-                KitchenArea = hostelCreateRequest.KitchenArea,
-                LivingSpace = hostelCreateRequest.LivingSpace,
-                Locality = hostelCreateRequest.Locality,
-                MaterialHouse = hostelCreateRequest.MaterialHouse,
-                NumberApartament = hostelCreateRequest.NumberApartament,
-                NumberProperty = hostelCreateRequest.NumberProperty,
-                Price = hostelCreateRequest.Price,
-                DateTimePublished = DateTime.Now,
-                SourceRealEstateObjectId =
-                resultResponse is not null
-                ? resultResponse.Data!.Id
-                : hostelCreateRequest.SourceRealEstateObjectId!.Value
+                SourceRealEstateObjectId = resultResponse.Data!.Id
             };
-            using var db = new RealEstateDataContext();
+            await using var db = new RealEstateDataContext();
             await db.Hostel.AddAsync(hostel);
             await db.SaveChangesAsync();
-            await new ExportJpgService()
+            await ExportImageService
                 .ImportManyFile(
-                $"~/Files/Img/RealEstateObjects/{resultResponse!.Data!.Id}",
+                $"wwwroot/images/real-estate-objects/{resultResponse.Data!.Id}",
                 hostelCreateRequest.Files);
             return await Get(hostel.Id);
         }
         public async Task<BaseResponse<HostelDetailResponse>> Change(HostelChangeRequest hostelChangeRequest)
         {
             var resultValidation = hostelChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccses == false) return resultValidation;
-            using var db = new RealEstateDataContext();
-            var hostelGet = await db.Hostel.AsNoTracking().FirstOrDefaultAsync(h => h.Id == hostelChangeRequest.IdHostel);
+            if (resultValidation.IsSuccess == false) return resultValidation;
+            await using var db = new RealEstateDataContext();
+            var hostelGet = await db.Hostel.AsNoTracking().FirstOrDefaultAsync(h => h.Id == hostelChangeRequest.Id);
             if(hostelGet == null)
                 return new BaseResponse<HostelDetailResponse>() 
                 {
-                    IsSuccses = false,
+                    IsSuccess = false,
                     ErrorMessage = "Такой общаги не было найденно"
                 };
-            var hostel = new Hostel()
+            var hostel = new Hostel(
+                hostelChangeRequest.CountRooms,
+                hostelChangeRequest.District,
+                hostelChangeRequest.Street,
+                hostelChangeRequest.NumberApartment,
+                hostelChangeRequest.NumberProperty,
+                hostelChangeRequest.ConditionHouse,
+                hostelChangeRequest.LivingSpace,
+                hostelChangeRequest.TotalArea,
+                hostelChangeRequest.KitchenArea,
+                hostelChangeRequest.IsCorner,
+                hostelChangeRequest.CountFloorsHouse,
+                hostelChangeRequest.LocatedFloorApartment,
+                hostelChangeRequest.CountBalcony,
+                hostelChangeRequest.MaterialHouse,
+                hostelChangeRequest.Description,
+                hostelChangeRequest.Price,
+                hostelChangeRequest.EmployeeId,
+                hostelChangeRequest.TypeSale,
+                hostelChangeRequest.Locality)
             {
-                Id = hostelChangeRequest.IdHostel,
-                CountRooms = hostelChangeRequest.CountRooms,
-                CountFloorsHouse = hostelChangeRequest.CountFloorsHouse,
-                LocatedFloorApartament = hostelChangeRequest.LocatedFloorApartament,
-                ConditionHouse = hostelChangeRequest.ConditionHouse,
-                Description = hostelChangeRequest.Description,
-                CountBalcony = hostelChangeRequest.CountBalcony,
-                District = hostelChangeRequest.District,
-                Street = hostelChangeRequest.Street,
-                EmployeeId = hostelChangeRequest.IdEmployee,
-                TypeSale = hostelChangeRequest.TypeSale,
-                TotalArea = hostelChangeRequest.TotalArea,
-                IsCorner = hostelChangeRequest.IsCorner,
-                KitchenArea = hostelChangeRequest.KitchenArea,
-                LivingSpace = hostelChangeRequest.LivingSpace,
-                Locality = hostelChangeRequest.Locality,
-                MaterialHouse = hostelChangeRequest.MaterialHouse,
-                NumberApartament = hostelChangeRequest.NumberApartament,
-                NumberProperty = hostelChangeRequest.NumberProperty,
-                Price = hostelChangeRequest.Price,
+                Id = hostelChangeRequest.Id,
                 IsActual = hostelChangeRequest.IsActual,
                 DateTimePublished = hostelGet.DateTimePublished,
                 SourceRealEstateObjectId = hostelGet.SourceRealEstateObjectId
@@ -111,57 +93,64 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<HostelDetailResponse>> Get(Guid id)
         {
-            using var db = new RealEstateDataContext();
+            await using var db = new RealEstateDataContext();
             var hostel = await db.Hostel.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
             if (hostel == null)
-                return new BaseResponse<HostelDetailResponse>() { IsSuccses = false, ErrorMessage = "Общежитие не было найдено" };
+                return new BaseResponse<HostelDetailResponse>
+                {
+                    IsSuccess = false,
+                    ErrorMessage = "Общежитие не было найдено"
+                };
             var responseEmployee =
                 hostel.EmployeeId is not null
                 ? await new EmployeeService().Get((Guid)hostel.EmployeeId) : null;
-            var fullPathsImage = new ExportJpgService().ExportFullPathsJpg($"~/Files/Img/RealEstateObjects/{hostel.SourceRealEstateObjectId}");
-            return new BaseResponse<HostelDetailResponse>()
+            var fullPathsImage = ExportImageService.ExportFullPathsImage(
+                $"wwwroot/images/real-estate-objects/{hostel.SourceRealEstateObjectId}");
+            return new BaseResponse<HostelDetailResponse>
             {
-                IsSuccses = true,
-                Data = new HostelDetailResponse()
-                {
-                    FullPathsImage = fullPathsImage,
-                    IdHostel = hostel.Id,
-                    CountFloorsHouse = hostel.CountFloorsHouse,
-                    LocatedFloorApartament = hostel.LocatedFloorApartament,
-                    ConditionHouse = hostel.ConditionHouse,
-                    CountBalcony = hostel.CountBalcony,
-                    CountRooms = hostel.CountRooms,
-                    DateTimePublished = hostel.DateTimePublished,
-                    Description = hostel.Description,
-                    District = hostel.District,
-                    Employee = responseEmployee?.Data,
-                    IsActual = hostel.IsActual,
-                    IsCorner = hostel.IsCorner,
-                    KitchenArea = hostel.KitchenArea,
-                    LivingSpace = hostel.LivingSpace,
-                    Locality = hostel.Locality,
-                    MaterialHouse = hostel.MaterialHouse,
-                    NumberApartament = hostel.NumberApartament,
-                    NumberProperty = hostel.NumberProperty,
-                    Price = hostel.Price,
-                    Street = hostel.Street, 
-                    TotalArea = hostel.TotalArea,
-                    TypeSale = hostel.TypeSale
-                }
+                IsSuccess = true,
+                Data = new HostelDetailResponse(
+                    hostel.Id,
+                    hostel.CountRooms,
+                    hostel.District,
+                    hostel.Street,
+                    hostel.NumberApartment,
+                    hostel.NumberProperty,
+                    hostel.ConditionHouse,
+                    hostel.LivingSpace,
+                    hostel.TotalArea,
+                    hostel.KitchenArea,
+                    hostel.IsCorner,
+                    hostel.CountFloorsHouse,
+                    hostel.LocatedFloorApartment,
+                    hostel.CountBalcony,
+                    hostel.MaterialHouse,
+                    hostel.Description,
+                    hostel.Price,
+                    responseEmployee?.Data,
+                    hostel.TypeSale,
+                    hostel.Locality,
+                    hostel.IsActual,
+                    hostel.DateTimePublished,
+                    fullPathsImage)
             };
         }
         public async Task<BaseResponse<HostelDetailResponse>> Delete(Guid id)
         {
-            var serviceRealEstateObject = new SourceRealEstateObjectService();
-            using var db = new RealEstateDataContext();
+            ISourceRealEstateObjectService serviceRealEstateObject = new SourceRealEstateObjectService();
+            await using var db = new RealEstateDataContext();
             var hostel = await db.Hostel.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
             if (hostel == null)
-                return new BaseResponse<HostelDetailResponse>() { IsSuccses = false, ErrorMessage = "Общежитие не было найдено" };
-            Guid idSourceObject = hostel.SourceRealEstateObjectId;
+                return new BaseResponse<HostelDetailResponse> 
+                    { 
+                        IsSuccess = false,
+                        ErrorMessage = "Общежитие не было найдено"
+                    };
+            var idSourceObject = hostel.SourceRealEstateObjectId;
             db.Hostel.Remove(hostel);
             await db.SaveChangesAsync();
             await serviceRealEstateObject.Delete(idSourceObject);
-            return new BaseResponse<HostelDetailResponse>() { IsSuccses = true };
+            return new BaseResponse<HostelDetailResponse> { IsSuccess = true };
         }
     }
 }

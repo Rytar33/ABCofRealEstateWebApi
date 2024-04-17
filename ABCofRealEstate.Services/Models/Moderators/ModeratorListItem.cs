@@ -1,13 +1,24 @@
-﻿using ABCofRealEstate.Data.Enums;
-
-namespace ABCofRealEstate.Services.Models.Moderators
+﻿namespace ABCofRealEstate.Services.Models.Moderators
 {
     public class ModeratorListItem
     {
-        public Guid IdModerator { get; set; }
-        public string Name { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public EnumAccessLevel AccessLevel { get; set; }
-        public bool IsSuperModerator { get; set; }
+        public ModeratorListItem(
+            Guid id,
+            string name,
+            string email,
+            EnumAccessLevel accessLevel,
+            bool isSuperModerator)
+        {
+            Id = id;
+            Name = name;
+            Email = email;
+            AccessLevel = accessLevel;
+            IsSuperModerator = isSuperModerator;
+        }
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+        public string Email { get; init; }
+        public EnumAccessLevel AccessLevel { get; init; }
+        public bool IsSuperModerator { get; init; }
     }
 }

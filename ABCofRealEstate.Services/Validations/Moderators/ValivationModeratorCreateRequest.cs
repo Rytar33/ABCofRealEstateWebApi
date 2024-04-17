@@ -8,7 +8,7 @@ namespace ABCofRealEstate.Services.Validations.Moderators
         public static BaseResponse<ModeratorDetailResponse> GetResultValidation(this ModeratorCreateRequest moderatorChangeRequest)
         {
 
-            return new BaseResponse<ModeratorDetailResponse> { IsSuccses = true };
+            return new BaseResponse<ModeratorDetailResponse> { IsSuccess = true };
         }
     }
 }

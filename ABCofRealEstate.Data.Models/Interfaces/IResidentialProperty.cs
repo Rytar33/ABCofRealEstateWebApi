@@ -6,12 +6,12 @@ namespace ABCofRealEstate.Data.Models.Interfaces
     public interface IResidentialProperty : IBuilding
     {
         /// <summary> Площадь(в кв. м.) жилая </summary>
-        public double LivingSpace { get; set; }
+        public decimal LivingSpace { get; init; }
         /// <summary> Площадь(в кв. м.) общая </summary>
-        public double TotalArea { get; set; }
+        public decimal TotalArea { get; init; }
         /// <summary> Площадь(в кв. м.) кухни </summary>
-        public double KitchenArea { get; set; }
+        public decimal KitchenArea { get; init; }
         /// <summary> Состояние дома </summary>
-        public EnumConditionHouse? ConditionHouse { get; set; }
+        public EnumConditionHouse? ConditionHouse { get; init; }
     }
 }

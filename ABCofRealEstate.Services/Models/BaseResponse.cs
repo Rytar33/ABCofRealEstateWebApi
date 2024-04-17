@@ -2,8 +2,8 @@
 {
     public class BaseResponse<TData>
     {
-        public bool IsSuccses { get; set; }
-        public string? ErrorMessage { get; set; }
-        public TData? Data { get; set; }
+        public bool IsSuccess { get; init; }
+        public string? ErrorMessage { get; init; }
+        public TData? Data { get; init; }
     }
 }

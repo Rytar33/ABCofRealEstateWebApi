@@ -1,13 +1,30 @@
-﻿using ABCofRealEstate.Data.Enums;
-
-namespace ABCofRealEstate.Services.Models.SourceRealEstateObjects
+﻿namespace ABCofRealEstate.Services.Models.SourceRealEstateObjects
 {
     public class SourceRealEstateObjectListItem
     {
-        public Guid IdSource { get; set; }
-        public string? ImagePath { get; set; }
-        public EnumLocality Locality { get; set; }
-        public string ImportantInformation { get; set; } = null!;
-        public int Price { get; set; }
+        public SourceRealEstateObjectListItem(
+            Guid idSource,
+            EnumObject typeObject,
+            Guid idRealEstateObject,
+            string? imagePath,
+            EnumLocality locality,
+            string importantInformation,
+            int price)
+        {
+            IdSource = idSource;
+            TypeObject = typeObject;
+            IdRealEstateObject = idRealEstateObject;
+            ImagePath = imagePath;
+            Locality = locality;
+            ImportantInformation = importantInformation;
+            Price = price;
+        }
+        public Guid IdSource { get; init; }
+        public EnumObject TypeObject { get; init; }
+        public Guid IdRealEstateObject { get; init; }
+        public string? ImagePath { get; init; }
+        public EnumLocality Locality { get; init; }
+        public string ImportantInformation { get; init; }
+        public int Price { get; init; }
     }
 }

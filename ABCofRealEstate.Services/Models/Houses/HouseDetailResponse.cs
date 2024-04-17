@@ -1,32 +1,80 @@
-﻿using ABCofRealEstate.Data.Enums;
-using ABCofRealEstate.Services.Models.Employees;
+﻿using ABCofRealEstate.Services.Models.Employees;
 
 namespace ABCofRealEstate.Services.Models.Houses
 {
     public class HouseDetailResponse
     {
-        public string[] FullPathsImage { get; set; } = Array.Empty<string>();
-        public Guid IdHouse { get; set; }
-        public string? District { get; set; }
-        public string? Street { get; set; }
-        public string? Description { get; set; }
-        public int Price { get; set; }
-        public EmployeeDetailResponse? Employee { get; set; }
-        public short CountRooms { get; set; }
-        public short LocatedFloorApartament { get; set; }
-        public short CountFloorsHouse { get; set; }
-        public bool IsCorner { get; set; }
-        public EnumMaterialHouse? MaterialHouse { get; set; }
-        public EnumConditionHouse? ConditionHouse { get; set; }
-        public double LivingSpace { get; set; }
-        public double TotalArea { get; set; }
-        public double KitchenArea { get; set; }
-        public double Area { get; set; }
-        public double GardenSot { get; set; }
-        public EnumTypeSale TypeSale { get; set; }
-        public EnumLocality Locality { get; set; }
-        public DateTime DateTimePublished { get; set; }
-        public bool IsActual { get; set; }
-        public string NumberProperty { get; set; } = null!;
+        public HouseDetailResponse(
+            Guid id,
+            short countRooms,
+            string? district,
+            string? street,
+            string numberProperty,
+            EnumConditionHouse? conditionHouse,
+            decimal livingSpace,
+            decimal totalArea,
+            decimal kitchenArea,
+            bool isCorner,
+            short countFloorsHouse,
+            short locatedFloorApartment,
+            EnumMaterialHouse? materialHouse,
+            string description,
+            int price,
+            EmployeeDetailResponse? employee,
+            EnumTypeSale typeSale,
+            EnumLocality locality,
+            decimal gardenSot,
+            decimal area,
+            bool isActual,
+            DateTime dateTimePublished,
+            string[] fullPathsImage)
+        {
+            Id = id;
+            CountRooms = countRooms;
+            District = district;
+            Street = street;
+            NumberProperty = numberProperty;
+            ConditionHouse = conditionHouse;
+            LivingSpace = livingSpace;
+            TotalArea = totalArea;
+            KitchenArea = kitchenArea;
+            IsCorner = isCorner;
+            CountFloorsHouse = countFloorsHouse;
+            LocatedFloorApartment = locatedFloorApartment;
+            MaterialHouse = materialHouse;
+            Description = description;
+            Price = price;
+            Employee = employee;
+            TypeSale = typeSale;
+            Locality = locality;
+            GardenSot = gardenSot;
+            Area = area;
+            IsActual = isActual;
+            DateTimePublished = dateTimePublished;
+            FullPathsImage = fullPathsImage;
+        }
+        public string[] FullPathsImage { get; init; }
+        public Guid Id { get; init; }
+        public string? District { get; init; }
+        public string? Street { get; init; }
+        public string? Description { get; init; }
+        public int Price { get; init; }
+        public EmployeeDetailResponse? Employee { get; init; }
+        public short CountRooms { get; init; }
+        public short LocatedFloorApartment { get; init; }
+        public short CountFloorsHouse { get; init; }
+        public bool IsCorner { get; init; }
+        public EnumMaterialHouse? MaterialHouse { get; init; }
+        public EnumConditionHouse? ConditionHouse { get; init; }
+        public decimal LivingSpace { get; init; }
+        public decimal TotalArea { get; init; }
+        public decimal KitchenArea { get; init; }
+        public decimal Area { get; init; }
+        public decimal GardenSot { get; init; }
+        public EnumTypeSale TypeSale { get; init; }
+        public EnumLocality Locality { get; init; }
+        public DateTime DateTimePublished { get; init; }
+        public bool IsActual { get; init; }
+        public string NumberProperty { get; init; }
     }
 }

@@ -1,0 +1,17 @@
+﻿@model ABCofRealEstate.Services.Models.Employees.EmployeeListResponse
+@{
+    ViewBag.Title = "IndexTeam";
+}
+@foreach (var item in Model.Items)
+{
+    <div>
+        @if (item.FullPathFile != null)
+        {
+            <img src="@item.FullPathFile" height="150"><br/>
+        }
+        <p>Email: @item.Email</p>
+        <p>Name: @item.FullName</p>
+        <p>Number phone: @item.NumberPhone</p>
+        <p>Job title: @item.JobTitle</p>
+    </div>
+}

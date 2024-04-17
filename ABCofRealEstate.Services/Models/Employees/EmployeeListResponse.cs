@@ -4,7 +4,14 @@ namespace ABCofRealEstate.Services.Models.Employees
 {
     public class EmployeeListResponse
     {
-        public IEnumerable<EmployeeListItem> Items { get; set; }
-        public PageResponse? Page { get; set; }
+        public EmployeeListResponse(
+            IEnumerable<EmployeeListItem> items,
+            PageResponse? page)
+        {
+            Items = items;
+            Page = page;
+        }
+        public IEnumerable<EmployeeListItem> Items { get; init; }
+        public PageResponse? Page { get; init; }
     }
 }

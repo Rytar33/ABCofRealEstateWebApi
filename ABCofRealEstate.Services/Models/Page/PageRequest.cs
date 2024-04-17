@@ -2,7 +2,12 @@
 {
     public class PageRequest
     {
-        public int Page { get; set; }
-        public int PageSize { get; set; }
+        public PageRequest(int? page = null, int? pageSize = null)
+        {
+            Page = page ?? 1;
+            PageSize = pageSize ?? 10;
+        }
+        public int Page { get; init; }
+        public int PageSize { get; init; }
     }
 }

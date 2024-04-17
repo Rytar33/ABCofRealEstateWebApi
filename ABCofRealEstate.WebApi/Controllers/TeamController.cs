@@ -1,5 +1,7 @@
 ﻿using ABCofRealEstate.Services;
+using ABCofRealEstate.Services.Interfaces;
 using ABCofRealEstate.Services.Models.Employees;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ABCofRealEstate.WebApi.Controllers
@@ -9,47 +11,50 @@ namespace ABCofRealEstate.WebApi.Controllers
     public class TeamController : Controller
     {
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get(Guid idEmployee)
+        public async Task<IActionResult> Get([FromQuery] Guid id)
         {
-            EmployeeService employeeService = new EmployeeService();
-            var employees = await employeeService.Get(idEmployee);
-            if (employees.IsSuccses == false)
+            IEmployeeService employeeService = new EmployeeService();
+            var employees = await employeeService.Get(id);
+            if (employees.IsSuccess == false)
                 return NotFound(employees);
             return Ok(employees);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllEmployees()
+        public async Task<IActionResult> GetAllEmployees([FromQuery] EmployeeListRequest employeeListRequest)
         {
-            EmployeeService employeeService = new EmployeeService();
-            var employees = await employeeService.GetAllEmployees();
-            if(employees.IsSuccses == false)
+            IEmployeeService employeeService = new EmployeeService();
+            var employees = await employeeService.GetPage(employeeListRequest);
+            if(employees.IsSuccess == false)
                 return NotFound(employees);
-            return Ok(employees);
+            return View("~/Views/ABCofRealEstate/Team/GetAllEmployees.cshtml", employees.Data);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm]EmployeeCreateRequest employeeCreateRequest)
         {
-            EmployeeService employeeService = new EmployeeService();
+            IEmployeeService employeeService = new EmployeeService();
             var employee = await employeeService.Create(employeeCreateRequest);
-            if (employee.IsSuccses == false)
+            if (employee.IsSuccess == false)
                 return BadRequest(employee);
-            return Created($"ABCofRealEstate/Team?idEmployee={employee.Data!.IdEmployee}", employee);
+            return Created($"ABCofRealEstate/Team?id={employee.Data!.Id}", employee);
         }
+        [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(EmployeeChangeRequest employeeChangeRequest)
         {
-            EmployeeService employeeService = new EmployeeService();
+            IEmployeeService employeeService = new EmployeeService();
             var employee = await employeeService.Change(employeeChangeRequest);
-            if (employee.IsSuccses == false)
+            if (employee.IsSuccess == false)
                 return BadRequest(employee);
             return Ok(employee);
         }
+        [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Delete(Guid idEmployee)
+        public async Task<IActionResult> Delete([FromQuery] Guid id)
         {
-            EmployeeService employeeService = new EmployeeService();
-            var response = await employeeService.Delete(idEmployee);
-            if (response.IsSuccses == false)
+            IEmployeeService employeeService = new EmployeeService();
+            var response = await employeeService.Delete(id);
+            if (response.IsSuccess == false)
                 return NotFound(response);
             return NoContent();
         }

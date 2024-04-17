@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -17,7 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\ABCofRealEstate\Apartament\" />
+    <Folder Include="wwwroot\css\" />
+    <Folder Include="wwwroot\images\real-estate-objects\" />
+    <Folder Include="wwwroot\images\team\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\images\real-estate-objects\ceac2221-fd50-46da-b263-b3ac2f41bdc1\24b41e303adfe88e26efe1a74e277ebb.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\real-estate-objects\ceac2221-fd50-46da-b263-b3ac2f41bdc1\697a47b2a66de9c7c8c5167f8daa01f9.jpg" />
   </ItemGroup>
 
 </Project>

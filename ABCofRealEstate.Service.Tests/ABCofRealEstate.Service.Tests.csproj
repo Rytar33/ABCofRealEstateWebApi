@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ABCofRealEstate.Data.Enums\ABCofRealEstate.Data.Enums.csproj" />
     <ProjectReference Include="..\ABCofRealEstate.Services\ABCofRealEstate.Services.csproj" />
+    <ProjectReference Include="..\ABCofRealEstate.WebApi\ABCofRealEstate.WebApi.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ namespace ABCofRealEstate.Services.Validations.Houses
         public static BaseResponse<HouseDetailResponse> GetResultValidation(this HouseCreateRequest houseCreateRequest)
         {
 
-            return new BaseResponse<HouseDetailResponse> { IsSuccses = true };
+            return new BaseResponse<HouseDetailResponse> { IsSuccess = true };
         }
     }
 }

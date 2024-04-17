@@ -1,9 +1,13 @@
-﻿using ABCofRealEstate.Data.Enums;
-
-namespace ABCofRealEstate.Services.Models.SourceRealEstateObjects
+﻿namespace ABCofRealEstate.Services.Models.SourceRealEstateObjects
 {
     public class SourceRealEstateObjectCreateRequest
     {
-        public EnumObject NameObject { get; set; }
+        public SourceRealEstateObjectCreateRequest(EnumObject nameObject) 
+            => NameObject = nameObject;
+        public SourceRealEstateObjectCreateRequest()
+        {
+            
+        }
+        public EnumObject NameObject { get; init; }
     }
 }
