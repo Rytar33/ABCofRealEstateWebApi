@@ -80,19 +80,12 @@ namespace ABCofRealEstate.WebApi
             });
 
             var app = builder.Build();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "ABCofRealEstate/{controller=Home}");
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+            
+            app.UseSwagger();
+            app.UseSwaggerUI();
             app.UseCors("default");
-            //app.UseDefaultFiles();
             app.UseStaticFiles();
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
