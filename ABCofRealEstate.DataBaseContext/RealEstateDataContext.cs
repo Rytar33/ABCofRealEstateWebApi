@@ -24,7 +24,9 @@ namespace ABCofRealEstate.DataBaseContext
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=company_abc_real_estate;Username=postgres;Password=postgres");
+            optionsBuilder.UseNpgsql(
+                "Host=dpg-cosh37nsc6pc73e7766g-a;Port=5432;Database=company_abc_real_estate;" +
+                "Username=company_abc_of_real_estate_user;Password=qfv6iAGZkaDZvdY1dWKuNziauGWHg2oj");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
