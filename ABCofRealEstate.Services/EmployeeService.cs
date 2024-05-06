@@ -21,7 +21,7 @@ namespace ABCofRealEstate.Services
             await db.SaveChangesAsync();
             if (employeeCreateRequest.File != null)
                 await ExportImageService.ImportSingleFile(
-                $"wwwroot/image/team/{employee.Id}",
+                $"wwwroot/images/team/{employee.Id}",
                 employeeCreateRequest.File);
             return await Get(employee.Id);
         }
@@ -106,6 +106,25 @@ namespace ABCofRealEstate.Services
                         countEmployees))
             };
         }
+
+        public async Task<BaseResponse<IEnumerable<EmployeeGetShortListResponse>>> GetShortList()
+        { 
+            await using var db = new RealEstateDataContext();
+            var employees = db.Employee
+                .AsNoTracking()
+                .Select(e => 
+                    new EmployeeGetShortListResponse 
+                    { 
+                        IdEmployee = e.Id, 
+                        FullName = e.FullName 
+                    }).ToList();
+            return new BaseResponse<IEnumerable<EmployeeGetShortListResponse>>
+            {
+                IsSuccess = true,
+                Data = employees
+            };
+        }
+        
         public async Task<BaseResponse<EmployeeDetailResponse>> Delete(Guid id)
         {
             await using var db = new RealEstateDataContext();

@@ -18,8 +18,7 @@ namespace ABCofRealEstate.Services
             var moderator = new Moderator(
                 moderatorCreateRequest.Name,
                 moderatorCreateRequest.Email,
-                moderatorCreateRequest.Password,
-                moderatorCreateRequest.AccessLevel);
+                moderatorCreateRequest.Password.GetSha256());
             await using var db = new RealEstateDataContext();
             await db.Moderator.AddAsync(moderator);
             await db.SaveChangesAsync();
@@ -40,8 +39,7 @@ namespace ABCofRealEstate.Services
             var moderator = new Moderator(
                 moderatorChangeRequest.Name,
                 moderatorChangeRequest.Email,
-                moderatorGet.Password,
-                moderatorChangeRequest.AccessLevel)
+                moderatorGet.Password)
             {
                 Id = moderatorChangeRequest.Id,
                 IsSuperModerator = moderatorChangeRequest.IsSuperModerator
@@ -55,10 +53,12 @@ namespace ABCofRealEstate.Services
         {
             await using var db = new RealEstateDataContext();
             var moderator = await db.Moderator
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => 
                     (m.Email == moderatorAuthenticationRequest.EmailOrName 
                     || m.Name == moderatorAuthenticationRequest.EmailOrName) 
-                    & m.Password == moderatorAuthenticationRequest.Password.GetSha256());
+                    && m.Password == moderatorAuthenticationRequest.Password.GetSha256());
+                //?? await db.Moderator.FirstOrDefaultAsync();
             if (moderator == null)
                 return new BaseResponse<ModeratorLogInResponse>()
                 {
@@ -69,7 +69,7 @@ namespace ABCofRealEstate.Services
             var jwt = new JwtSecurityToken(
                 issuer: "MyAuthServer",
                 audience: "MyAuthClient",
-                claims: new List<Claim>(){new Claim(ClaimTypes.Name, moderator.Email)},
+                claims: new List<Claim>(){new(nameof(Moderator.IsSuperModerator), moderator.IsSuperModerator.ToString())},
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256));
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt);
@@ -78,11 +78,7 @@ namespace ABCofRealEstate.Services
                 IsSuccess = true,
                 Data = new ModeratorLogInResponse(
                     jwtToken,
-                    moderator.Id,
-                    moderator.Name,
-                    moderator.Email,
-                    moderator.AccessLevel,
-                    moderator.IsSuperModerator)
+                    moderator.Id)
             };
 
         }
@@ -103,7 +99,6 @@ namespace ABCofRealEstate.Services
                     moderator.Id,
                     moderator.Name,
                     moderator.Email,
-                    moderator.AccessLevel,
                     moderator.IsSuperModerator)
             };
         }
@@ -125,9 +120,6 @@ namespace ABCofRealEstate.Services
                     .Where(m =>
                         m.Name.Contains(moderatorListRequest.Search)
                         || m.Email.Contains(moderatorListRequest.Search));
-            if (moderatorListRequest.AccessLevel != null)
-                moderatorsQueryable = moderatorsQueryable
-                    .Where(m => m.AccessLevel == moderatorListRequest.AccessLevel);
             if (moderatorListRequest.IsSuperModerator != null)
                 moderatorsQueryable = moderatorsQueryable
                     .Where(m => m.IsSuperModerator == moderatorListRequest.IsSuperModerator);
@@ -146,7 +138,6 @@ namespace ABCofRealEstate.Services
                                 m.Id,
                                 m.Name,
                                 m.Email,
-                                m.AccessLevel,
                                 m.IsSuperModerator))
                         .AsEnumerable(),
                     new PageResponse(

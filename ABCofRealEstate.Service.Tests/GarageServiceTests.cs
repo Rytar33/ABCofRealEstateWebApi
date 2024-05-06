@@ -16,6 +16,10 @@ namespace ABCofRealEstate.Service.Tests
                 garage.EmployeeId,
                 garage.TypeSale,
                 garage.Locality,
+                garage.GarageCapacity,
+                garage.HaveBasement,
+                garage.Latitude,
+                garage.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -62,16 +66,13 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.Price,
                 responseCreated.Data!.Employee?.Id,
                 responseCreated.Data!.TypeSale,
-                responseCreated.Data!.Locality)
+                responseCreated.Data!.Locality,
+                responseCreated.Data!.GarageCapacity,
+                responseCreated.Data!.HaveBasement,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
+                responseCreated.Data!.IsActual)
             {
-                Id = responseCreated.Data!.Id,
-                District = responseCreated.Data!.District,
-                Street = responseCreated.Data!.Street,
-                Description = responseCreated.Data!.Description,
-                Price = responseCreated.Data!.Price,
-                EmployeeId = responseCreated.Data!.Employee?.Id,
-                Locality = responseCreated.Data!.Locality,
-                TypeSale = responseCreated.Data!.TypeSale,
                 IsActual = false
             };
             // Act

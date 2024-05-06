@@ -18,6 +18,8 @@
             decimal roomArea,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
             bool isActual)
         {
             Id = id;
@@ -35,6 +37,8 @@
             RoomArea = roomArea;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
         }
         public ComertionChangeRequest()
@@ -56,6 +60,8 @@
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
         public string NumberProperty { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public bool IsActual { get; init; }
     }
 }

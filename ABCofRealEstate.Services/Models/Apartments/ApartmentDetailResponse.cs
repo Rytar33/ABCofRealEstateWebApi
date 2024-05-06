@@ -25,6 +25,8 @@ namespace ABCofRealEstate.Services.Models.Apartments
             EmployeeDetailResponse? employee,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
             string[] fullPathsImage,
             bool isActual,
             DateTime dateTimePublished)
@@ -49,11 +51,13 @@ namespace ABCofRealEstate.Services.Models.Apartments
             Employee = employee;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             FullPathsImage = fullPathsImage;
             IsActual = isActual;
             DateTimePublished = dateTimePublished;
         }
-        public string[] FullPathsImage { get; set; }
+        public string[] FullPathsImage { get; init; }
         public Guid Id { get; init; }
         public short CountRooms { get; init; }
         public string? District { get; init; }
@@ -75,6 +79,8 @@ namespace ABCofRealEstate.Services.Models.Apartments
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
         public DateTime DateTimePublished { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public bool IsActual { get; init; }
     }
 }

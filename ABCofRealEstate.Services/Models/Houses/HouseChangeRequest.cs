@@ -23,6 +23,8 @@
             EnumLocality locality,
             decimal gardenSot,
             decimal area,
+            decimal latitude,
+            decimal longitude,
             bool isActual)
         {
             Id = id;
@@ -45,6 +47,8 @@
             Locality = locality;
             GardenSot = gardenSot;
             Area = area;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
         }
         public HouseChangeRequest()
@@ -71,6 +75,8 @@
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
         public string NumberProperty { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public bool IsActual { get; init; }
     }
 }

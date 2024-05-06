@@ -25,6 +25,8 @@ namespace ABCofRealEstate.Services.Models.Hostels
             EmployeeDetailResponse? employee,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
             bool isActual,
             DateTime dateTimePublished,
             string[] fullPathsImage)
@@ -49,6 +51,8 @@ namespace ABCofRealEstate.Services.Models.Hostels
             Employee = employee;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
             DateTimePublished = dateTimePublished;
             FullPathsImage = fullPathsImage;
@@ -76,5 +80,7 @@ namespace ABCofRealEstate.Services.Models.Hostels
         public string NumberProperty { get; init; }
         public short NumberApartment { get; init; }
         public short CountBalcony { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
     }
 }

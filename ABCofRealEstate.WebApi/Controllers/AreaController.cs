@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Services;
+using ABCofRealEstate.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ABCofRealEstate.Services.Models.Areas;
 using Microsoft.AspNetCore.Authorization;
@@ -6,36 +7,51 @@ using Microsoft.AspNetCore.Authorization;
 namespace ABCofRealEstate.WebApi.Controllers
 {
     [ApiController]
-    [Route("ABCofRealEstate/[controller]")]
+    [Route("api/v1.2/[controller]")]
     public class AreaController : Controller
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Guid id)
+        public AreaController()
         {
-            var area = await new AreaService().Get(id);
-            if (area.IsSuccess == false) return NotFound();
-            return View("~/Views/ABCofRealEstate/Area/Get.cshtml", area.Data);
+            _areaService = new AreaService();
+        }
+
+        private readonly IAreaService _areaService;
+        
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var response = await _areaService.Get(id);
+            return response.IsSuccess
+                ? Ok(response.Data)
+                : NotFound();
+            //View("~/Views/ABCofRealEstate/Area/Get.cshtml", area.Data);
         }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] AreaCreateRequest area)
         {
-            var response = await new AreaService().Create(area);
-            return Created($"ABCofRealEstate/Area?id={response.Data!.Id}", response);
+            var response = await _areaService.Create(area);
+            return response.IsSuccess 
+                ? Created($"api/v1.2/Area/{response.Data!.Id}", response.Data)
+                : BadRequest(response);
         }
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(AreaChangeRequest area)
         {
-            var response = await new AreaService().Change(area);
-            return Ok(response);
+            var response = await _areaService.Change(area);
+            return response.IsSuccess
+                ? NoContent()
+                : BadRequest(response);
         }
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var response = await new AreaService().Delete(id);
-            return Ok(response);
+            var response = await _areaService.Delete(id);
+            return response.IsSuccess
+                ? NoContent()
+                : NotFound();
         }
     }
 }

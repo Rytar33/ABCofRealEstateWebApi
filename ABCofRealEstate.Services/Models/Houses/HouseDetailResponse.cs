@@ -25,6 +25,8 @@ namespace ABCofRealEstate.Services.Models.Houses
             EnumLocality locality,
             decimal gardenSot,
             decimal area,
+            decimal latitude,
+            decimal longitude,
             bool isActual,
             DateTime dateTimePublished,
             string[] fullPathsImage)
@@ -49,6 +51,8 @@ namespace ABCofRealEstate.Services.Models.Houses
             Locality = locality;
             GardenSot = gardenSot;
             Area = area;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
             DateTimePublished = dateTimePublished;
             FullPathsImage = fullPathsImage;
@@ -73,6 +77,8 @@ namespace ABCofRealEstate.Services.Models.Houses
         public decimal GardenSot { get; init; }
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public DateTime DateTimePublished { get; init; }
         public bool IsActual { get; init; }
         public string NumberProperty { get; init; }

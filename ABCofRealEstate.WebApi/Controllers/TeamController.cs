@@ -7,56 +7,63 @@ using Microsoft.AspNetCore.Mvc;
 namespace ABCofRealEstate.WebApi.Controllers
 {
     [ApiController]
-    [Route("ABCofRealEstate/[controller]")]
+    [Route("api/v1.2")]
     public class TeamController : Controller
     {
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get([FromQuery] Guid id)
+        public TeamController()
         {
-            IEmployeeService employeeService = new EmployeeService();
-            var employees = await employeeService.Get(id);
-            if (employees.IsSuccess == false)
-                return NotFound(employees);
-            return Ok(employees);
+            _employeeService = new EmployeeService();
         }
-        [HttpGet]
+
+        private readonly IEmployeeService _employeeService; 
+        
+        [HttpGet("[controller]/{id:guid}")]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var response = await _employeeService.Get(id);
+            return response.IsSuccess
+                ? Ok(response.Data)
+                : NotFound();
+        }
+        [HttpGet("[controller]s/Short")]
+        public async Task<IActionResult> GetShortListEmployees()
+        {
+            var response = await new EmployeeService().GetShortList();
+            return Ok(response.Data);
+        }
+        [HttpGet("[controller]s")]
         public async Task<IActionResult> GetAllEmployees([FromQuery] EmployeeListRequest employeeListRequest)
         {
-            IEmployeeService employeeService = new EmployeeService();
-            var employees = await employeeService.GetPage(employeeListRequest);
-            if(employees.IsSuccess == false)
-                return NotFound(employees);
-            return View("~/Views/ABCofRealEstate/Team/GetAllEmployees.cshtml", employees.Data);
+            var response = await _employeeService.GetPage(employeeListRequest);
+            return Ok(response.Data);
+            //return View("~/Views/ABCofRealEstate/Team/GetAllEmployees.cshtml", employees.Data);
         }
         [Authorize]
-        [HttpPost]
+        [HttpPost("[controller]")]
         public async Task<IActionResult> Add([FromForm]EmployeeCreateRequest employeeCreateRequest)
         {
-            IEmployeeService employeeService = new EmployeeService();
-            var employee = await employeeService.Create(employeeCreateRequest);
-            if (employee.IsSuccess == false)
-                return BadRequest(employee);
-            return Created($"ABCofRealEstate/Team?id={employee.Data!.Id}", employee);
+            var response = await _employeeService.Create(employeeCreateRequest);
+            return response.IsSuccess
+                ? Created($"api/v1.2/Team/{response.Data!.Id}", response.Data)
+                : BadRequest(response);
         }
         [Authorize]
-        [HttpPut]
+        [HttpPut("[controller]")]
         public async Task<IActionResult> Update(EmployeeChangeRequest employeeChangeRequest)
         {
-            IEmployeeService employeeService = new EmployeeService();
-            var employee = await employeeService.Change(employeeChangeRequest);
-            if (employee.IsSuccess == false)
-                return BadRequest(employee);
-            return Ok(employee);
+            var response = await _employeeService.Change(employeeChangeRequest);
+            return response.IsSuccess
+                ? NoContent()
+                : BadRequest(response);
         }
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid id)
+        [HttpDelete("[controller]/{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            IEmployeeService employeeService = new EmployeeService();
-            var response = await employeeService.Delete(id);
-            if (response.IsSuccess == false)
-                return NotFound(response);
-            return NoContent();
+            var response = await _employeeService.Delete(id);
+            return response.IsSuccess
+                ? NoContent()
+                : NotFound();
         }
     }
 }

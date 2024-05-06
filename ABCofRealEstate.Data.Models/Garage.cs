@@ -16,7 +16,11 @@ namespace ABCofRealEstate.Data.Models
             int price,
             Guid? employeeId,
             EnumTypeSale typeSale,
-            EnumLocality locality)
+            EnumLocality locality,
+            short garageCapacity,
+            bool haveBasement,
+            decimal latitude,
+            decimal longitude)
         {
             District = district;
             Street = street;
@@ -25,7 +29,11 @@ namespace ABCofRealEstate.Data.Models
             EmployeeId = employeeId;
             TypeSale = typeSale;
             Locality = locality;
-            ImportantInformation = description.ToString();
+            GarageCapacity = garageCapacity;
+            HaveBasement = haveBasement;
+            Latitude = latitude;
+            Longitude = longitude;
+            ImportantInformation = garageCapacity.ToString();
         }
         /// <summary> Идентификатор гаража </summary>
         [Display(Name = "id")]
@@ -50,12 +58,23 @@ namespace ABCofRealEstate.Data.Models
         public EnumTypeSale TypeSale { get; init; }
         [Display(Name = "locality")]
         public EnumLocality Locality { get; init; }
-
+        /// <summary> Вместимость гаража </summary>
+        [Display(Name = "garage_capacity")]
+        public short GarageCapacity { get; init; }
+        /// <summary> Есть ли подвал </summary>
+        [Display(Name = "have_basement")]
+        public bool HaveBasement { get; init; }
         [Display(Name = "date_time_published")]
         public DateTime DateTimePublished { get; init; } = DateTime.UtcNow;
         [Display(Name = "is_actual")]
         public bool IsActual { get; init; } = true;
         [NotMapped]
         public string ImportantInformation { get; init; }
+        
+        [Display(Name = "latitude")]
+        public decimal Latitude { get; init; }
+        
+        [Display(Name = "longitude")]
+        public decimal Longitude { get; init; }
     }
 }

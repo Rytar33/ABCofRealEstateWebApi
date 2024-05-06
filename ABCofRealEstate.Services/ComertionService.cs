@@ -31,7 +31,9 @@ namespace ABCofRealEstate.Services
                 comertionCreateRequest.Price,
                 comertionCreateRequest.EmployeeId,
                 comertionCreateRequest.TypeSale,
-                comertionCreateRequest.Locality)
+                comertionCreateRequest.Locality,
+                comertionCreateRequest.Latitude,
+                comertionCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -70,7 +72,9 @@ namespace ABCofRealEstate.Services
                 comertionChangeRequest.Price,
                 comertionChangeRequest.EmployeeId,
                 comertionChangeRequest.TypeSale,
-                comertionChangeRequest.Locality)
+                comertionChangeRequest.Locality,
+                comertionChangeRequest.Latitude,
+                comertionChangeRequest.Longitude)
             {
                 Id = comertionChangeRequest.Id,
                 DateTimePublished = comertionGet.DateTimePublished,
@@ -118,6 +122,8 @@ namespace ABCofRealEstate.Services
                     comertion.RoomArea,
                     comertion.TypeSale,
                     comertion.Locality,
+                    comertion.Latitude,
+                    comertion.Longitude,
                     comertion.IsActual,
                     comertion.DateTimePublished)
             };

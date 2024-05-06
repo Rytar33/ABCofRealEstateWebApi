@@ -12,8 +12,7 @@ namespace ABCofRealEstate.Service.Tests
             return new ModeratorCreateRequest(
                 moderator.Name,
                 moderator.Email,
-                moderator.Password,
-                moderator.AccessLevel);
+                moderator.Password);
         }
         [Fact]
         public async Task GetPageModeratorsFromServiceTest()
@@ -23,7 +22,6 @@ namespace ABCofRealEstate.Service.Tests
             var moderatorListRequest = new ModeratorListRequest(
                 null,
                 false,
-                accessLevel: EnumAccessLevel.Delete,
                 page: new PageRequest());
             
             // Act
@@ -32,8 +30,7 @@ namespace ABCofRealEstate.Service.Tests
             // Assert
             Assert.True(responseListModerator.IsSuccess 
                         && responseListModerator.Data!.Items.All(i => 
-                            i.IsSuperModerator == moderatorListRequest.IsSuperModerator
-                            && i.AccessLevel == moderatorListRequest.AccessLevel));
+                            i.IsSuperModerator == moderatorListRequest.IsSuperModerator));
         }
         [Fact]
         public async Task GetModeratorFromServiceTest()
@@ -75,7 +72,6 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.Id,
                 responseCreated.Data!.Name,
                 responseCreated.Data!.Email,
-                responseCreated.Data!.AccessLevel,
                 true);
             
             // Act

@@ -28,6 +28,8 @@ namespace ABCofRealEstate.Service.Tests
                 hostel.EmployeeId,
                 hostel.TypeSale,
                 hostel.Locality,
+                hostel.Latitude,
+                hostel.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -88,6 +90,8 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.Employee?.Id,
                 responseCreated.Data!.TypeSale,
                 responseCreated.Data!.Locality,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
                 responseCreated.Data!.IsActual);
 
             // Act

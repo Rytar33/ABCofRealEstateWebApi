@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Services;
+using ABCofRealEstate.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ABCofRealEstate.Services.Models.Garages;
 using Microsoft.AspNetCore.Authorization;
@@ -6,36 +7,51 @@ using Microsoft.AspNetCore.Authorization;
 namespace ABCofRealEstate.WebApi.Controllers
 {
     [ApiController]
-    [Route("ABCofRealEstate/[controller]")]
+    [Route("api/v1.2/[controller]")]
     public class GarageController : Controller
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Guid id)
+        public GarageController()
         {
-            var garage = await new GarageService().Get(id);
-            if (garage.IsSuccess == false) return NotFound();
-            return View("~/Views/ABCofRealEstate/Garage/Get.cshtml", garage.Data);
+            _garageService = new GarageService();
+        }
+
+        private readonly IGarageService _garageService;
+        
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var response = await _garageService.Get(id);
+            return response.IsSuccess
+                ? Ok(response.Data)
+                : NotFound();
+            //View("~/Views/ABCofRealEstate/Garage/Get.cshtml", garage.Data);
         }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] GarageCreateRequest garage)
         {
-            var response = await new GarageService().Create(garage);
-            return Created($"ABCofRealEstate/Garage?id={response.Data!.Id}", response);
+            var response = await _garageService.Create(garage);
+            return response.IsSuccess
+                ? Created($"api/v1.2/Garage/{response.Data!.Id}", response.Data)
+                : BadRequest(response);
         }
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(GarageChangeRequest garage)
         {
-            var response = await new GarageService().Change(garage);
-            return Ok(response);
+            var response = await _garageService.Change(garage);
+            return response.IsSuccess
+                ? NoContent()
+                : BadRequest(response);
         }
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var response = await new GarageService().Delete(id);
-            return Ok(response);
+            var response = await _garageService.Delete(id);
+            return response.IsSuccess
+                ? NoContent()
+                : NotFound();
         }
     }
 }

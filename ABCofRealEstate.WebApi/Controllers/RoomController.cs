@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Services;
+using ABCofRealEstate.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ABCofRealEstate.Services.Models.Rooms;
 using Microsoft.AspNetCore.Authorization;
@@ -6,36 +7,50 @@ using Microsoft.AspNetCore.Authorization;
 namespace ABCofRealEstate.WebApi.Controllers
 {
     [ApiController]
-    [Route("ABCofRealEstate/[controller]")]
+    [Route("api/v1.2/[controller]")]
     public class RoomController : Controller
     {
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] Guid id)
+        public RoomController()
         {
-            var room = await new RoomService().Get(id);
-            if (room.IsSuccess == false) return NotFound();
-            return Ok(room);
+            _roomService = new RoomService();
+        }
+
+        private readonly IRoomService _roomService;
+        
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
+        {
+            var response = await _roomService.Get(id);
+            return response.IsSuccess
+                ? Ok(response.Data)
+                : NotFound();
         }
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Add([FromForm] RoomCreateRequest room)
         {
-            var response = await new RoomService().Create(room);
-            return Created($"ABCofRealEstate/Room?id={response.Data!.Id}", response);
+            var response = await _roomService.Create(room);
+            return response.IsSuccess 
+                ? Created($"api/v1.2/Room/{response.Data!.Id}", response.Data)
+                : BadRequest(response);
         }
         [Authorize]
         [HttpPut]
         public async Task<IActionResult> Update(RoomChangeRequest room)
         {
-            var response = await new RoomService().Change(room);
-            return Ok(response);
+            var response = await _roomService.Change(room);
+            return response.IsSuccess
+                ? NoContent()
+                : BadRequest(response);
         }
         [Authorize]
-        [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var response = await new RoomService().Delete(id);
-            return Ok(response);
+            var response = await _roomService.Delete(id);
+            return response.IsSuccess
+                ? NoContent()
+                : NotFound();
         }
     }
 }

@@ -12,6 +12,10 @@ namespace ABCofRealEstate.Services.Models.Garages
             Guid? employeeId,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            short garageCapacity,
+            bool haveBasement,
+            decimal latitude,
+            decimal longitude,
             ICollection<IFormFile> files)
         {
             District = district;
@@ -21,6 +25,10 @@ namespace ABCofRealEstate.Services.Models.Garages
             EmployeeId = employeeId;
             TypeSale = typeSale;
             Locality = locality;
+            GarageCapacity = garageCapacity;
+            HaveBasement = haveBasement;
+            Latitude = latitude;
+            Longitude = longitude;
             Files = files;
         }
         public GarageCreateRequest()
@@ -34,6 +42,10 @@ namespace ABCofRealEstate.Services.Models.Garages
         public Guid? EmployeeId { get; init; }
         public EnumLocality Locality { get; init; }
         public EnumTypeSale TypeSale { get; init; }
+        public short GarageCapacity { get; init; }
+        public bool HaveBasement { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public ICollection<IFormFile> Files { get; init; }
     }
 }

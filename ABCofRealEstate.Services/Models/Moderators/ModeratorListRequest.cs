@@ -7,12 +7,10 @@ namespace ABCofRealEstate.Services.Models.Moderators
         public ModeratorListRequest(
             string? search,
             bool? isSuperModerator,
-            EnumAccessLevel? accessLevel,
             PageRequest? page)
         {
             Search = search;
             IsSuperModerator = isSuperModerator;
-            AccessLevel = accessLevel;
             Page = page ?? new PageRequest();
         }
         public ModeratorListRequest()
@@ -21,7 +19,6 @@ namespace ABCofRealEstate.Services.Models.Moderators
         }
         public string? Search { get; init; }
         public bool? IsSuperModerator { get; init; }
-        public EnumAccessLevel? AccessLevel { get; init; }
         public PageRequest? Page { get; init; }
     }
 }

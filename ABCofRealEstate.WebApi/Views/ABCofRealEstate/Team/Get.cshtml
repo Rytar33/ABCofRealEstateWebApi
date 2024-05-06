@@ -1,9 +1,0 @@
-@model ABCofRealEstate.Services.Models.Employees.EmployeeDetailResponse
-@if (Model.FullPathFile != null)
-{
-    <img src="@Model.FullPathFile" height="150"/>
-}
-<p>Имя: @Model.FullName</p>
-<p>Электронная почта: @Model.Email</p>
-<p>Должность @Model.JobTitle</p>
-<p>Номер телефона: @Model.NumberPhone</p>

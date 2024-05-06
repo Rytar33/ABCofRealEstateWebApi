@@ -36,7 +36,9 @@ namespace ABCofRealEstate.Services
                 houseCreateRequest.TypeSale,
                 houseCreateRequest.Locality,
                 houseCreateRequest.GardenSot,
-                houseCreateRequest.Area)
+                houseCreateRequest.Area,
+                houseCreateRequest.Latitude,
+                houseCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -80,7 +82,9 @@ namespace ABCofRealEstate.Services
                 houseChangeRequest.TypeSale,
                 houseChangeRequest.Locality,
                 houseChangeRequest.GardenSot,
-                houseChangeRequest.Area)
+                houseChangeRequest.Area,
+                houseChangeRequest.Latitude,
+                houseChangeRequest.Longitude)
             {
                 Id = houseChangeRequest.Id,
                 IsActual = houseChangeRequest.IsActual,
@@ -130,6 +134,8 @@ namespace ABCofRealEstate.Services
                     house.Locality,
                     house.GardenSot,
                     house.Area,
+                    house.Latitude,
+                    house.Longitude,
                     house.IsActual,
                     house.DateTimePublished,
                     fullPathsImage)

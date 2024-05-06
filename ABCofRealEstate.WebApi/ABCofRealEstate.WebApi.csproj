@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,15 +19,35 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\real-estate-objects\" />
     <Folder Include="wwwroot\images\team\" />
-    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="wwwroot\images\real-estate-objects\ceac2221-fd50-46da-b263-b3ac2f41bdc1\24b41e303adfe88e26efe1a74e277ebb.jpg" />
     <_ContentIncludedByDefault Remove="wwwroot\images\real-estate-objects\ceac2221-fd50-46da-b263-b3ac2f41bdc1\697a47b2a66de9c7c8c5167f8daa01f9.jpg" />
+    <_ContentIncludedByDefault Remove="wwwroot\images\team\a1e1206d-ebce-4d1a-a52d-b243e792b59e\ca35781a24d035babc75168c1aebf6c7.jpg" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Apartment\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Apartment\Update.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Area\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Comertion\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Garage\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Hostel\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\House\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Moderator\LogIn.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Page\GetPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Room\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Team\Get.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\ABCofRealEstate\Team\GetAllEmployees.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
   </ItemGroup>
 
 </Project>

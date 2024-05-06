@@ -1,9 +1,0 @@
-@model ABCofRealEstate.Services.Models.Houses.HouseDetailResponse
-@{
-    ViewBag.Title = "House";
-}
-@if (Model.Employee != null)
-{
-    <hr>
-    @await Html.PartialAsync("~/Views/ABCofRealEstate/Team/Get.cshtml", Model.Employee)
-}

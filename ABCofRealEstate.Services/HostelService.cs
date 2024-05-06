@@ -36,7 +36,9 @@ namespace ABCofRealEstate.Services
                 hostelCreateRequest.Price,
                 hostelCreateRequest.EmployeeId,
                 hostelCreateRequest.TypeSale,
-                hostelCreateRequest.Locality)
+                hostelCreateRequest.Locality,
+                hostelCreateRequest.Latitude,
+                hostelCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -80,7 +82,9 @@ namespace ABCofRealEstate.Services
                 hostelChangeRequest.Price,
                 hostelChangeRequest.EmployeeId,
                 hostelChangeRequest.TypeSale,
-                hostelChangeRequest.Locality)
+                hostelChangeRequest.Locality,
+                hostelChangeRequest.Latitude,
+                hostelChangeRequest.Longitude)
             {
                 Id = hostelChangeRequest.Id,
                 IsActual = hostelChangeRequest.IsActual,
@@ -130,6 +134,8 @@ namespace ABCofRealEstate.Services
                     responseEmployee?.Data,
                     hostel.TypeSale,
                     hostel.Locality,
+                    hostel.Latitude,
+                    hostel.Longitude,
                     hostel.IsActual,
                     hostel.DateTimePublished,
                     fullPathsImage)

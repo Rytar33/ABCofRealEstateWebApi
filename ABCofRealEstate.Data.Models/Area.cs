@@ -17,7 +17,9 @@ namespace ABCofRealEstate.Data.Models
             Guid? employeeId,
             EnumTypeSale typeSale,
             EnumLocality locality,
-            int landArea)
+            int landArea,
+            decimal latitude,
+            decimal longitude)
         {
             District = district;
             Street = street;
@@ -27,6 +29,8 @@ namespace ABCofRealEstate.Data.Models
             TypeSale = typeSale;
             Locality = locality;
             LandArea = landArea;
+            Latitude = latitude;
+            Longitude = longitude;
             ImportantInformation = landArea.ToString();
         }
         /// <summary> Идентификатор участка </summary>
@@ -61,5 +65,11 @@ namespace ABCofRealEstate.Data.Models
         public bool IsActual { get; init; } = true;
         [NotMapped]
         public string ImportantInformation { get; init; }
+        
+        [Display(Name = "latitude")]
+        public decimal Latitude { get; init; }
+        
+        [Display(Name = "longitude")]
+        public decimal Longitude { get; init; }
     }
 }

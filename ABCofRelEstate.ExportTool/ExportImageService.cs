@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ABCofRelEstate.ExportTool
 {
-    public class ExportImageService : IExportImageService
+    public static class ExportImageService
     {
         public static async Task ImportManyFile(string dirPath, ICollection<IFormFile> files)
         {
@@ -56,11 +56,33 @@ namespace ABCofRelEstate.ExportTool
                     .Select(i => GetPathForWeb(dirInfo, Path.GetFileName(i))));
             return fullPaths.ToArray();
         }
-        public static void RemovePathWithFiles(string dirPath)
+        public static void RemovePathWithFiles(string dirPath, bool secondAttempt = false)
         {
-            var dirInfo = new DirectoryInfo(dirPath);
-            if (!dirInfo.Exists) return;
-            dirInfo.Delete();
+            if (secondAttempt)
+            {
+                Thread.Sleep(0);
+
+                foreach (var f in Directory.GetFiles(dirPath, "*.*", SearchOption.TopDirectoryOnly))
+                    File.Delete(f);
+
+                foreach (var d in Directory.GetDirectories(dirPath))
+                    RemovePathWithFiles(d);
+
+                Directory.Delete(dirPath, false);
+                return;
+            }
+            try
+            {
+                Directory.Delete(dirPath, true);
+            }
+            catch (IOException)
+            {
+                RemovePathWithFiles(dirPath, true);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                RemovePathWithFiles(dirPath, true);
+            } 
         }
     }
 }

@@ -19,6 +19,8 @@ namespace ABCofRealEstate.Services.Models.Comertions
             decimal roomArea,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
             ICollection<IFormFile> formFiles)
         {
             CountRooms = countRooms;
@@ -35,6 +37,8 @@ namespace ABCofRealEstate.Services.Models.Comertions
             RoomArea = roomArea;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             Files = formFiles;
         }
         public ComertionCreateRequest()
@@ -55,6 +59,8 @@ namespace ABCofRealEstate.Services.Models.Comertions
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
         public string NumberProperty { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public ICollection<IFormFile> Files { get; init; }
     }
 }

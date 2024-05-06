@@ -25,7 +25,9 @@ namespace ABCofRealEstate.Services
                 areaCreateRequest.EmployeeId,
                 areaCreateRequest.TypeSale,
                 areaCreateRequest.Locality,
-                areaCreateRequest.LandArea)
+                areaCreateRequest.LandArea,
+                areaCreateRequest.Latitude,
+                areaCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -58,7 +60,9 @@ namespace ABCofRealEstate.Services
                 areaChangeRequest.EmployeeId,
                 areaChangeRequest.TypeSale,
                 areaChangeRequest.Locality,
-                areaChangeRequest.LandArea)
+                areaChangeRequest.LandArea,
+                areaChangeRequest.Latitude,
+                areaChangeRequest.Longitude)
             {
                 Id = areaChangeRequest.Id,
                 IsActual = areaChangeRequest.IsActual,
@@ -100,6 +104,8 @@ namespace ABCofRealEstate.Services
                     area.TypeSale,
                     area.Locality,
                     area.LandArea,
+                    area.Latitude,
+                    area.Longitude,
                     area.IsActual,
                     area.DateTimePublished)
             };

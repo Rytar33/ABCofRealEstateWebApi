@@ -16,6 +16,8 @@ namespace ABCofRealEstate.Services.Models.Areas
             EnumTypeSale typeSale,
             EnumLocality locality,
             int landArea,
+            decimal latitude,
+            decimal longitude,
             bool isActual,
             DateTime dateTimePublished)
         {
@@ -29,6 +31,8 @@ namespace ABCofRealEstate.Services.Models.Areas
             TypeSale = typeSale;
             Locality = locality;
             LandArea = landArea;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
             DateTimePublished = dateTimePublished;
         }
@@ -42,6 +46,8 @@ namespace ABCofRealEstate.Services.Models.Areas
         public int LandArea { get; init; }
         public EnumLocality Locality { get; init; }
         public EnumTypeSale TypeSale { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public DateTime DateTimePublished { get; init; }
         public bool IsActual { get; init; }
     }

@@ -36,7 +36,9 @@ namespace ABCofRealEstate.Services
                 roomCreateRequest.Price,
                 roomCreateRequest.EmployeeId,
                 roomCreateRequest.TypeSale,
-                roomCreateRequest.Locality)
+                roomCreateRequest.Locality,
+                roomCreateRequest.Latitude,
+                roomCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -80,7 +82,9 @@ namespace ABCofRealEstate.Services
                 roomChangeRequest.Price,
                 roomChangeRequest.EmployeeId,
                 roomChangeRequest.TypeSale,
-                roomChangeRequest.Locality)
+                roomChangeRequest.Locality,
+                roomChangeRequest.Latitude,
+                roomChangeRequest.Longitude)
             {
                 Id = roomChangeRequest.Id,
                 IsActual = roomChangeRequest.IsActual,
@@ -132,6 +136,8 @@ namespace ABCofRealEstate.Services
                     room.Locality,
                     room.IsActual,
                     room.DateTimePublished,
+                    room.Latitude,
+                    room.Longitude,
                     fullPathsImage)
             };
         }

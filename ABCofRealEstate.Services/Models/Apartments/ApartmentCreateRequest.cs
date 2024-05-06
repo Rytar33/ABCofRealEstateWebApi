@@ -24,6 +24,8 @@ namespace ABCofRealEstate.Services.Models.Apartments
             Guid? employeeId,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
             ICollection<IFormFile> files)
         {
             CountRooms = countRooms;
@@ -45,6 +47,8 @@ namespace ABCofRealEstate.Services.Models.Apartments
             EmployeeId = employeeId;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             Files = files;
         }
 
@@ -71,6 +75,8 @@ namespace ABCofRealEstate.Services.Models.Apartments
         public Guid? EmployeeId { get; init; }
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public ICollection<IFormFile> Files { get; init; }
     }
 }

@@ -34,7 +34,9 @@ namespace ABCofRealEstate.Services
                 _faker.Random.Number(50000, 500000),
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
-                _faker.PickRandom<EnumLocality>());
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<Area> GetGenerationArea()
         {
@@ -47,7 +49,9 @@ namespace ABCofRealEstate.Services
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
                 _faker.PickRandom<EnumLocality>(),
-                _faker.Random.Number(50, 1000));
+                _faker.Random.Number(50, 1000),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<Comertion> GetGenerationComertion()
         {
@@ -66,7 +70,9 @@ namespace ABCofRealEstate.Services
                 _faker.Random.Number(50000, 500000),
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
-                _faker.PickRandom<EnumLocality>());
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<Garage> GetGenerationGarage()
         {
@@ -78,7 +84,11 @@ namespace ABCofRealEstate.Services
                 _faker.Random.Number(50000, 500000),
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
-                _faker.PickRandom<EnumLocality>());
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Short(1, 4),
+                _faker.Random.Bool(),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<Hostel> GetGenerationHostel()
         {
@@ -102,7 +112,9 @@ namespace ABCofRealEstate.Services
                 _faker.Random.Number(50000, 500000),
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
-                _faker.PickRandom<EnumLocality>());
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<House> GetGenerationHouse()
         {
@@ -126,7 +138,9 @@ namespace ABCofRealEstate.Services
                 _faker.PickRandom<EnumTypeSale>(),
                 _faker.PickRandom<EnumLocality>(),
                 _faker.Random.Decimal(10, 150),
-                _faker.Random.Decimal(100, 2000));
+                _faker.Random.Decimal(100, 2000),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public async Task<Room> GetGenerationRoom()
         {
@@ -150,7 +164,9 @@ namespace ABCofRealEstate.Services
                 _faker.Random.Number(50000, 500000),
                 employee?.Id,
                 _faker.PickRandom<EnumTypeSale>(),
-                _faker.PickRandom<EnumLocality>());
+                _faker.PickRandom<EnumLocality>(),
+                _faker.Random.Decimal(-50, 50),
+                _faker.Random.Decimal(-50, 50));
         }
         public Employee GetGenerationEmployee()
             => new(
@@ -162,8 +178,7 @@ namespace ABCofRealEstate.Services
             => new(
                 _faker.Name.FirstName(),
                 _faker.Person.Email,
-                "qwerty123".GetSha256(),
-                _faker.PickRandom<EnumAccessLevel>())
+                "qwerty123".GetSha256())
             {
                 IsSuperModerator = _faker.Random.Bool()
             };

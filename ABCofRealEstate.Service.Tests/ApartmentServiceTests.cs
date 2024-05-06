@@ -28,6 +28,8 @@ namespace ABCofRealEstate.Service.Tests
                 apartment.EmployeeId,
                 apartment.TypeSale,
                 apartment.Locality,
+                apartment.Latitude,
+                apartment.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -86,7 +88,10 @@ namespace ABCofRealEstate.Service.Tests
                 11111,
                 responseCreated.Data!.Employee?.Id,
                 responseCreated.Data!.TypeSale,
-                responseCreated.Data!.Locality);
+                responseCreated.Data!.Locality,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
+                responseCreated.Data!.IsActual);
 
             //Act
             var responseChanged = await apartmentService.Change(apartmentChangeRequest);

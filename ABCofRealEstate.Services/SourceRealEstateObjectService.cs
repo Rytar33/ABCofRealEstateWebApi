@@ -23,6 +23,8 @@ namespace ABCofRealEstate.Services
                     EnumObject.Room => await db.Room.FirstAsync(r => r.SourceRealEstateObjectId == item.Id),
                     _ => throw new ArgumentOutOfRangeException("Такого объекта не было найдено")
                 };
+                if (realEstateObject.IsActual != listRequest.IsActual)
+                    continue;
                 var fullPathFile = ExportImageService.ExportFullPathImage($"wwwroot/images/real-estate-objects/{item.Id}") ??
                     ExportImageService.ExportFullPathImage("wwwroot/images/real-estate-objects");
                 realEstateObjectListItems.Add(new SourceRealEstateObjectListItem(
@@ -31,14 +33,21 @@ namespace ABCofRealEstate.Services
                     realEstateObject.Id,
                     fullPathFile,
                     realEstateObject.Locality,
+                    realEstateObject.TypeSale,
                     realEstateObject.ImportantInformation,
                     realEstateObject.Price));
             }
             var realEstateObjects = realEstateObjectListItems.AsEnumerable();
+
+            if (listRequest.TypeSale != null)
+                realEstateObjects = realEstateObjects.Where(r => r.TypeSale == listRequest.TypeSale);
             if (listRequest.TypeObject != null)
-                realEstateObjects = realEstateObjects.Where(r => db.SourceRealEstateObject.FirstOrDefault(s => s.Id == r.IdSource && s.NameObject == listRequest.TypeObject) != null);
+                realEstateObjects = realEstateObjects.Where(r => 
+                    db.SourceRealEstateObject.FirstOrDefault(s => 
+                        s.Id == r.IdSource && s.NameObject == listRequest.TypeObject) != null);
             if (listRequest.Locality != null)
-                realEstateObjects = realEstateObjects.Where(r => r.Locality == listRequest.Locality);
+                realEstateObjects = realEstateObjects.Where(r => 
+                    r.Locality == listRequest.Locality);
 
             int countObjects = realEstateObjects.Count();
             

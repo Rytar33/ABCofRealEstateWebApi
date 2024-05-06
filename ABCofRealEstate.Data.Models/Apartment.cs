@@ -28,7 +28,9 @@ namespace ABCofRealEstate.Data.Models
             int price,
             Guid? employeeId,
             EnumTypeSale typeSale,
-            EnumLocality locality)
+            EnumLocality locality,
+            decimal latitude,
+            decimal longitude)
         {
             CountRooms = countRooms;
             District = district;
@@ -49,6 +51,8 @@ namespace ABCofRealEstate.Data.Models
             EmployeeId = employeeId;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             ImportantInformation = countRooms.ToString();
         }
 
@@ -106,5 +110,11 @@ namespace ABCofRealEstate.Data.Models
         public bool IsActual { get; set; } = true;
         [NotMapped]
         public string ImportantInformation { get; init; }
+        
+        [Display(Name = "latitude")]
+        public decimal Latitude { get; init; }
+        
+        [Display(Name = "longitude")]
+        public decimal Longitude { get; init; }
     }
 }

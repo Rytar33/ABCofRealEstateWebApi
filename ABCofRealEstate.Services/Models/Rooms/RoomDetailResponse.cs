@@ -27,6 +27,8 @@ namespace ABCofRealEstate.Services.Models.Rooms
             EnumLocality locality,
             bool isActual,
             DateTime dateTimePublished,
+            decimal latitude,
+            decimal longitude,
             string[] fullPathsImage)
         {
             Id = id;
@@ -49,6 +51,8 @@ namespace ABCofRealEstate.Services.Models.Rooms
             Employee = employee;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
             DateTimePublished = dateTimePublished;
             FullPathsImage = fullPathsImage;
@@ -76,5 +80,7 @@ namespace ABCofRealEstate.Services.Models.Rooms
         public EnumConditionHouse? ConditionHouse { get; init; }
         public short NumberApartment { get; init; }
         public short CountBalcony { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
     }
 }

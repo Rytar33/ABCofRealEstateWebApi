@@ -4,23 +4,11 @@ public class ModeratorLogInResponse
 {
     public ModeratorLogInResponse(
         string token,
-        Guid id,
-        string name,
-        string email,
-        EnumAccessLevel accessLevel,
-        bool isSuperModerator)
+        Guid id)
     {
         Token = token;
         Id = id;
-        Name = name;
-        Email = email;
-        AccessLevel = accessLevel;
-        IsSuperModerator = isSuperModerator;
     }
-    public string Token { get; private init; }
+    public string Token { get; init; }
     public Guid Id { get; init; }
-    public string Name { get; init; }
-    public string Email { get; init; }
-    public EnumAccessLevel AccessLevel { get; init; }
-    public bool IsSuperModerator { get; init; }
 }

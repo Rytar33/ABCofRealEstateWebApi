@@ -23,6 +23,8 @@ namespace ABCofRealEstate.Service.Tests
                 comertion.RoomArea,
                 comertion.TypeSale,
                 comertion.Locality,
+                comertion.Latitude,
+                comertion.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -77,6 +79,8 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.RoomArea,
                 responseCreated.Data!.TypeSale,
                 responseCreated.Data!.Locality,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
                 responseCreated.Data!.IsActual);
 
             // Act

@@ -24,6 +24,8 @@ namespace ABCofRealEstate.Services.Models.Houses
             EnumLocality locality,
             decimal gardenSot,
             decimal area,
+            decimal latitude,
+            decimal longitude,
             ICollection<IFormFile> files)
         {
             CountRooms = countRooms;
@@ -45,6 +47,8 @@ namespace ABCofRealEstate.Services.Models.Houses
             Locality = locality;
             GardenSot = gardenSot;
             Area = area;
+            Latitude = latitude;
+            Longitude = longitude;
             Files = files;
         }
         public HouseCreateRequest()
@@ -70,6 +74,8 @@ namespace ABCofRealEstate.Services.Models.Houses
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
         public string NumberProperty { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public ICollection<IFormFile> Files { get; init; }
     }
 }

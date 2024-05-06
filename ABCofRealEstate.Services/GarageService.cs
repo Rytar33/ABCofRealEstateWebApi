@@ -24,7 +24,11 @@ namespace ABCofRealEstate.Services
                 garageCreateRequest.Price, 
                 garageCreateRequest.EmployeeId, 
                 garageCreateRequest.TypeSale, 
-                garageCreateRequest.Locality)
+                garageCreateRequest.Locality,
+                garageCreateRequest.GarageCapacity,
+                garageCreateRequest.HaveBasement,
+                garageCreateRequest.Latitude,
+                garageCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -56,7 +60,11 @@ namespace ABCofRealEstate.Services
                 garageChangeRequest.Price, 
                 garageChangeRequest.EmployeeId, 
                 garageChangeRequest.TypeSale, 
-                garageChangeRequest.Locality)
+                garageChangeRequest.Locality,
+                garageChangeRequest.GarageCapacity,
+                garageChangeRequest.HaveBasement,
+                garageChangeRequest.Latitude,
+                garageChangeRequest.Longitude)
             {
                 Id = garageChangeRequest.Id,
                 IsActual = garageChangeRequest.IsActual,
@@ -94,8 +102,12 @@ namespace ABCofRealEstate.Services
                     responseEmployee?.Data, 
                     garage.TypeSale, 
                     garage.Locality,
+                    garage.GarageCapacity,
+                    garage.HaveBasement,
                     garage.DateTimePublished,
                     garage.IsActual,
+                    garage.Latitude,
+                    garage.Longitude,
                     fullPathsImage)
             };
         }

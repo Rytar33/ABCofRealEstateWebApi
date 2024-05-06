@@ -36,7 +36,9 @@ namespace ABCofRealEstate.Services
                 apartmentCreateRequest.Price,
                 apartmentCreateRequest.EmployeeId,
                 apartmentCreateRequest.TypeSale,
-                apartmentCreateRequest.Locality)
+                apartmentCreateRequest.Locality,
+                apartmentCreateRequest.Latitude,
+                apartmentCreateRequest.Longitude)
             {
                 SourceRealEstateObjectId = resultResponse.Data!.Id
             };
@@ -80,7 +82,9 @@ namespace ABCofRealEstate.Services
                 apartmentChangeRequest.Price,
                 apartmentChangeRequest.EmployeeId,
                 apartmentChangeRequest.TypeSale,
-                apartmentChangeRequest.Locality)
+                apartmentChangeRequest.Locality,
+                apartmentChangeRequest.Latitude,
+                apartmentChangeRequest.Longitude)
             {
                 Id = apartmentSearch.Id,
                 IsActual = apartmentChangeRequest.IsActual,
@@ -132,6 +136,8 @@ namespace ABCofRealEstate.Services
                     responseEmployee?.Data,
                     apartment.TypeSale,
                     apartment.Locality,
+                    apartment.Latitude,
+                    apartment.Longitude,
                     fullPathsImage,
                     apartment.IsActual,
                     apartment.DateTimePublished)

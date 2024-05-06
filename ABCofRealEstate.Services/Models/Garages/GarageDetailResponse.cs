@@ -13,8 +13,12 @@ namespace ABCofRealEstate.Services.Models.Garages
             EmployeeDetailResponse? employee,
             EnumTypeSale typeSale,
             EnumLocality locality,
+            short garageCapacity,
+            bool haveBasement,
             DateTime dateTimePublished,
             bool isActual,
+            decimal latitude,
+            decimal longitude,
             string[] fullPathsImage)
         {
             Id = id;
@@ -25,7 +29,11 @@ namespace ABCofRealEstate.Services.Models.Garages
             Employee = employee;
             TypeSale = typeSale;
             Locality = locality;
+            GarageCapacity = garageCapacity;
+            HaveBasement = haveBasement;
             DateTimePublished = dateTimePublished;
+            Latitude = latitude;
+            Longitude = longitude;
             IsActual = isActual;
             FullPathsImage = fullPathsImage;
         }
@@ -39,6 +47,10 @@ namespace ABCofRealEstate.Services.Models.Garages
         public EnumLocality Locality { get; init; }
         public DateTime DateTimePublished { get; init; }
         public EnumTypeSale TypeSale { get; init; }
+        public short GarageCapacity { get; init; }
+        public bool HaveBasement { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public bool IsActual { get; init; }
     }
 }

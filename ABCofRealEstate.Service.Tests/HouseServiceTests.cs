@@ -28,6 +28,8 @@ namespace ABCofRealEstate.Service.Tests
                 house.Locality,
                 house.GardenSot,
                 house.Area,
+                house.Latitude,
+                house.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -87,6 +89,8 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.Locality,
                 responseCreated.Data!.GardenSot,
                 responseCreated.Data!.Area,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
                 responseCreated.Data!.IsActual);
             
             // Act

@@ -20,6 +20,7 @@ namespace ABCofRealEstate.DataBaseContext
         public RealEstateDataContext() 
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            Database.EnsureCreated();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -36,7 +37,13 @@ namespace ABCofRealEstate.DataBaseContext
             modelBuilder.Entity<Hostel>();
             modelBuilder.Entity<SourceRealEstateObject>();
             modelBuilder.Entity<Room>();
-            modelBuilder.Entity<Moderator>();
+            modelBuilder.Entity<Moderator>()
+                .HasData(
+                    new Moderator(
+                        "Oleg", 
+                        "oleg.olegov@gmail.com",
+                        "DAAAD6E5604E8E17BD9F108D91E26AFE6281DAC8FDA0091040A7A6D7BD9B43B5")
+                        { Id = Guid.NewGuid(), IsSuperModerator = true });
             // Locality
             ApplyEnumConverterToString<Apartment, EnumLocality>(modelBuilder, "Locality");
             ApplyEnumConverterToString<House, EnumLocality>(modelBuilder, "Locality");
@@ -68,8 +75,6 @@ namespace ABCofRealEstate.DataBaseContext
             ApplyEnumConverterToString<SourceRealEstateObject, EnumObject>(modelBuilder, "NameObject");
             // Job title
             ApplyEnumConverterToString<Employee, EnumJobTitleEmployee>(modelBuilder, "JobTitle");
-            // Access level
-            ApplyEnumConverterToString<Moderator, EnumAccessLevel>(modelBuilder, "AccessLevel");
         }
         private static void ApplyEnumConverterToString<TEntity, TEnum>(ModelBuilder modelBuilder, string propertyName)
             where TEntity : class

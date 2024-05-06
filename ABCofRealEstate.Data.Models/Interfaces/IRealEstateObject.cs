@@ -30,5 +30,10 @@ namespace ABCofRealEstate.Data.Models.Interfaces
         public Guid SourceRealEstateObjectId { get; init; }
         public SourceRealEstateObject? SourceRealEstateObject { get; init; }
         public string ImportantInformation { get; init; }
+        /// <summary> Широта </summary>
+        public decimal Latitude { get; init; }
+        
+        /// <summary> Долгота </summary>
+        public decimal Longitude { get; init; }
     }
 }

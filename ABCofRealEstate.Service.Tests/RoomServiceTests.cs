@@ -28,6 +28,8 @@ namespace ABCofRealEstate.Service.Tests
                 room.EmployeeId,
                 room.TypeSale,
                 room.Locality,
+                room.Latitude,
+                room.Longitude,
                 new List<IFormFile>());
         }
         [Fact]
@@ -87,6 +89,8 @@ namespace ABCofRealEstate.Service.Tests
                 responseCreated.Data!.Employee?.Id,
                 responseCreated.Data!.TypeSale,
                 responseCreated.Data!.Locality,
+                responseCreated.Data!.Latitude,
+                responseCreated.Data!.Longitude,
                 false);
             
             // Act

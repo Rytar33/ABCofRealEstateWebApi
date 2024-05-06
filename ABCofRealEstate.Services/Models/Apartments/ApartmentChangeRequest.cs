@@ -22,7 +22,10 @@
             int price,
             Guid? employeeId,
             EnumTypeSale typeSale,
-            EnumLocality locality)
+            EnumLocality locality,
+            decimal latitude,
+            decimal longitude,
+            bool isActual)
         {
             Id = id;
             CountRooms = countRooms;
@@ -44,6 +47,9 @@
             EmployeeId = employeeId;
             TypeSale = typeSale;
             Locality = locality;
+            Latitude = latitude;
+            Longitude = longitude;
+            IsActual = isActual;
         }
         public ApartmentChangeRequest()
         {
@@ -69,6 +75,8 @@
         public Guid? EmployeeId { get; init; }
         public EnumTypeSale TypeSale { get; init; }
         public EnumLocality Locality { get; init; }
+        public decimal Latitude { get; init; }
+        public decimal Longitude { get; init; }
         public bool IsActual { get; init; }
     }
 }

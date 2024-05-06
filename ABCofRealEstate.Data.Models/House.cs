@@ -29,7 +29,9 @@ namespace ABCofRealEstate.Data.Models
             EnumTypeSale typeSale,
             EnumLocality locality,
             decimal gardenSot,
-            decimal area)
+            decimal area,
+            decimal latitude,
+            decimal longitude)
         {
             CountRooms = countRooms;
             District = district;
@@ -50,6 +52,8 @@ namespace ABCofRealEstate.Data.Models
             Locality = locality;
             GardenSot = gardenSot;
             Area = area;
+            Latitude = latitude;
+            Longitude = longitude;
             ImportantInformation = totalArea.ToString(CultureInfo.InvariantCulture);
         }
         /// <summary> Идентификатор дома </summary>
@@ -108,5 +112,11 @@ namespace ABCofRealEstate.Data.Models
         public string NumberProperty { get; init; }
         [NotMapped]
         public string ImportantInformation { get; init; }
+        
+        [Display(Name = "latitude")]
+        public decimal Latitude { get; init; }
+        
+        [Display(Name = "longitude")]
+        public decimal Longitude { get; init; }
     }
 }
