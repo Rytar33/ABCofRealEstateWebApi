@@ -1,5 +1,4 @@
 ﻿using ABCofRealEstate.Services.Models.Rooms;
-using ABCofRealEstate.Services.Validations.Rooms;
 
 namespace ABCofRealEstate.Services
 {
@@ -7,8 +6,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<RoomDetailResponse>> Create(RoomCreateRequest roomCreateRequest)
         {
-            var resultValidation = roomCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Room));
             if (!resultResponse.IsSuccess)
@@ -53,8 +50,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<RoomDetailResponse>> Change(RoomChangeRequest roomChangeRequest)
         {
-            var resultValidation = roomChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var roomGet = await db.Room.AsNoTracking().FirstOrDefaultAsync(r => r.Id == roomChangeRequest.Id);
             if(roomGet == null)

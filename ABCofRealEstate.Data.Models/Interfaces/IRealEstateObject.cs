@@ -1,4 +1,5 @@
 ﻿using ABCofRealEstate.Data.Enums;
+using ABCofRealEstate.Data.Models.Entities;
 
 namespace ABCofRealEstate.Data.Models.Interfaces
 {
@@ -6,7 +7,7 @@ namespace ABCofRealEstate.Data.Models.Interfaces
     public interface IRealEstateObject
     {
         /// <summary> Идентификатор объекта </summary>
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         /// <summary> Район </summary>
         public string? District { get; init; }
         /// <summary> Улица </summary>

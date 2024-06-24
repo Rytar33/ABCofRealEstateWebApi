@@ -1,6 +1,5 @@
 ﻿using ABCofRealEstate.Services.Models.Employees;
 using ABCofRealEstate.Services.Models.Page;
-using ABCofRealEstate.Services.Validations.Employees;
 
 namespace ABCofRealEstate.Services
 {
@@ -8,9 +7,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<EmployeeDetailResponse>> Create(EmployeeCreateRequest employeeCreateRequest)
         {
-            var resultValidation = employeeCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
-
             var employee = new Employee(
                 employeeCreateRequest.Email,
                 employeeCreateRequest.FullName,
@@ -27,8 +23,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<EmployeeDetailResponse>> Change(EmployeeChangeRequest apartmentChangeRequest)
         {
-            var resultValidation = apartmentChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             if(!await db.Employee.AnyAsync(e => e.Id == apartmentChangeRequest.Id))
                 return new BaseResponse<EmployeeDetailResponse>
@@ -58,7 +52,8 @@ namespace ABCofRealEstate.Services
                     IsSuccess = false,
                     ErrorMessage = "Работник не был найден"
                 };
-            var fullPath = ExportImageService.ExportFullPathImage($"wwwroot/images/team/{employee.Id}");
+            var fullPath = ExportImageService.ExportFullPathImage($"wwwroot/images/team/{employee.Id}") 
+                ?? ExportImageService.ExportFullPathImage($"wwwroot/images/team");
             return new BaseResponse<EmployeeDetailResponse>
             {
                 IsSuccess = true,

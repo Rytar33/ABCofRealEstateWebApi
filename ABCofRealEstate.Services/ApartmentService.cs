@@ -1,5 +1,4 @@
 ﻿using ABCofRealEstate.Services.Models.Apartments;
-using ABCofRealEstate.Services.Validations.Apartments;
 
 namespace ABCofRealEstate.Services
 {
@@ -7,8 +6,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<ApartmentDetailResponse>> Create(ApartmentCreateRequest apartmentCreateRequest)
         {
-            var resultValidation = apartmentCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Apartment));
             if (!resultResponse.IsSuccess)
@@ -52,8 +49,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<ApartmentDetailResponse>> Change(ApartmentChangeRequest apartmentChangeRequest)
         {
-            var resultValidation = apartmentChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var apartmentSearch = await db.Apartment
                 .AsNoTracking()

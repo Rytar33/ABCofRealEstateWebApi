@@ -1,5 +1,4 @@
 ﻿using ABCofRealEstate.Services.Models.Hostels;
-using ABCofRealEstate.Services.Validations.Hostels;
 
 namespace ABCofRealEstate.Services
 {
@@ -7,8 +6,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<HostelDetailResponse>> Create(HostelCreateRequest hostelCreateRequest)
         {
-            var resultValidation = hostelCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Hostel));
             if (resultResponse.IsSuccess == false)
@@ -53,8 +50,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<HostelDetailResponse>> Change(HostelChangeRequest hostelChangeRequest)
         {
-            var resultValidation = hostelChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var hostelGet = await db.Hostel.AsNoTracking().FirstOrDefaultAsync(h => h.Id == hostelChangeRequest.Id);
             if(hostelGet == null)

@@ -10,19 +10,22 @@ namespace ABCofRealEstate.Services
             var realEstateObjectListItems = new List<SourceRealEstateObjectListItem>();
             await using var db = new RealEstateDataContext();
             realEstateObjectListItems.Capacity = await db.SourceRealEstateObject.CountAsync();
+            int maxPrice = 0;
             foreach (var item in db.SourceRealEstateObject.ToArray())
             {
-                IRealEstateObject realEstateObject = item.NameObject switch
+                IRealEstateObject? realEstateObject = item.NameObject switch
                 {
-                    EnumObject.Apartment => await db.Apartment.FirstAsync(a => a.SourceRealEstateObjectId == item.Id),
-                    EnumObject.Area => await db.Area.FirstAsync(a => a.SourceRealEstateObjectId == item.Id),
-                    EnumObject.Comertion => await db.Comertion.FirstAsync(c => c.SourceRealEstateObjectId == item.Id),
-                    EnumObject.Garage => await db.Garage.FirstAsync(g => g.SourceRealEstateObjectId == item.Id),
-                    EnumObject.Hostel => await db.Hostel.FirstAsync(h => h.SourceRealEstateObjectId == item.Id),
-                    EnumObject.House => await db.House.FirstAsync(h => h.SourceRealEstateObjectId == item.Id),
-                    EnumObject.Room => await db.Room.FirstAsync(r => r.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Apartment => await db.Apartment.FirstOrDefaultAsync(a => a.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Area => await db.Area.FirstOrDefaultAsync(a => a.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Comertion => await db.Comertion.FirstOrDefaultAsync(c => c.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Garage => await db.Garage.FirstOrDefaultAsync(g => g.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Hostel => await db.Hostel.FirstOrDefaultAsync(h => h.SourceRealEstateObjectId == item.Id),
+                    EnumObject.House => await db.House.FirstOrDefaultAsync(h => h.SourceRealEstateObjectId == item.Id),
+                    EnumObject.Room => await db.Room.FirstOrDefaultAsync(r => r.SourceRealEstateObjectId == item.Id),
                     _ => throw new ArgumentOutOfRangeException("Такого объекта не было найдено")
                 };
+                if (realEstateObject == null)
+                    continue;
                 if (realEstateObject.IsActual != listRequest.IsActual)
                     continue;
                 var fullPathFile = ExportImageService.ExportFullPathImage($"wwwroot/images/real-estate-objects/{item.Id}") ??
@@ -36,6 +39,8 @@ namespace ABCofRealEstate.Services
                     realEstateObject.TypeSale,
                     realEstateObject.ImportantInformation,
                     realEstateObject.Price));
+                if (maxPrice < realEstateObject.Price)
+                    maxPrice = realEstateObject.Price;
             }
             var realEstateObjects = realEstateObjectListItems.AsEnumerable();
 
@@ -63,7 +68,8 @@ namespace ABCofRealEstate.Services
                     new PageResponse(
                         listRequest.Page.Page,
                         listRequest.Page.PageSize,
-                        countObjects))
+                        countObjects),
+                    maxPrice)
             };
         }
         

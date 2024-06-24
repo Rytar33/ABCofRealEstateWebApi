@@ -1,8 +1,8 @@
 ﻿using ABCofRealEstate.Services;
-using ABCofRealEstate.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ABCofRealEstate.Services.Models.Areas;
 using Microsoft.AspNetCore.Authorization;
+using ABCofRealEstate.Services.Interfaces.Services;
 
 namespace ABCofRealEstate.WebApi.Controllers
 {

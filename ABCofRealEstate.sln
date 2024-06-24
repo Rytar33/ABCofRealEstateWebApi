@@ -17,9 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{FCD9E897-7C4
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABCofRealEstate.WebApi", "ABCofRealEstate.WebApi\ABCofRealEstate.WebApi.csproj", "{BD7A06DF-2D40-41B7-8FFD-5B15F3F09F3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABCofRealEstate.Service.Tests", "ABCofRealEstate.Service.Tests\ABCofRealEstate.Service.Tests.csproj", "{75E657FE-B256-4D93-BBAF-CEEE1E01CD12}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ABCofRelEstate.ExportTool", "ABCofRelEstate.ExportTool\ABCofRelEstate.ExportTool.csproj", "{35BA23F2-3EE6-4BED-992A-3DA4626BEC80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ABCofRealEstate.Service.Tests", "ABCofRealEstate.Service.Tests\ABCofRealEstate.Service.Tests.csproj", "{75E657FE-B256-4D93-BBAF-CEEE1E01CD12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{039ABE4A-D8E9-4DFB-9676-FA06FBC71BB9}"
 	ProjectSection(SolutionItems) = preProject
@@ -56,10 +54,6 @@ Global
 		{75E657FE-B256-4D93-BBAF-CEEE1E01CD12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75E657FE-B256-4D93-BBAF-CEEE1E01CD12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75E657FE-B256-4D93-BBAF-CEEE1E01CD12}.Release|Any CPU.Build.0 = Release|Any CPU
-		{35BA23F2-3EE6-4BED-992A-3DA4626BEC80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{35BA23F2-3EE6-4BED-992A-3DA4626BEC80}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{35BA23F2-3EE6-4BED-992A-3DA4626BEC80}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{35BA23F2-3EE6-4BED-992A-3DA4626BEC80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

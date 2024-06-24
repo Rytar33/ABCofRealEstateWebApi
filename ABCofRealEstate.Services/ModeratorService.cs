@@ -4,7 +4,6 @@ using System.Text;
 using ABCofRealEstate.Services.Extensions;
 using ABCofRealEstate.Services.Models.Moderators;
 using ABCofRealEstate.Services.Models.Page;
-using ABCofRealEstate.Services.Validations.Moderators;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ABCofRealEstate.Services
@@ -13,12 +12,10 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<ModeratorDetailResponse>> Create(ModeratorCreateRequest moderatorCreateRequest)
         {
-            var resultValidation = moderatorCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var moderator = new Moderator(
                 moderatorCreateRequest.Name,
                 moderatorCreateRequest.Email,
-                moderatorCreateRequest.Password.GetSha256());
+                moderatorCreateRequest.Password);
             await using var db = new RealEstateDataContext();
             await db.Moderator.AddAsync(moderator);
             await db.SaveChangesAsync();
@@ -26,8 +23,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<ModeratorDetailResponse>> Change(ModeratorChangeRequest moderatorChangeRequest)
         {
-            var resultValidation = moderatorChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var moderatorGet = await db.Moderator.AsNoTracking().FirstOrDefaultAsync(m => m.Id == moderatorChangeRequest.Id);
             if (moderatorGet == null)
@@ -58,7 +53,6 @@ namespace ABCofRealEstate.Services
                     (m.Email == moderatorAuthenticationRequest.EmailOrName 
                     || m.Name == moderatorAuthenticationRequest.EmailOrName) 
                     && m.Password == moderatorAuthenticationRequest.Password.GetSha256());
-                //?? await db.Moderator.FirstOrDefaultAsync();
             if (moderator == null)
                 return new BaseResponse<ModeratorLogInResponse>()
                 {
@@ -69,7 +63,11 @@ namespace ABCofRealEstate.Services
             var jwt = new JwtSecurityToken(
                 issuer: "MyAuthServer",
                 audience: "MyAuthClient",
-                claims: new List<Claim>(){new(nameof(Moderator.IsSuperModerator), moderator.IsSuperModerator.ToString())},
+                claims: new List<Claim>()
+                {
+                    new(nameof(Moderator.Id), moderator.Id.ToString()),
+                    new(nameof(Moderator.IsSuperModerator), moderator.IsSuperModerator.ToString())
+                },
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(7)),
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)), SecurityAlgorithms.HmacSha256));
             var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt);

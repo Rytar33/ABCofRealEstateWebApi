@@ -1,0 +1,30 @@
+﻿networks:
+  abcofrealestate.webapi:
+    driver: bridge
+services:
+  app:
+    container_name: abcofrealestate
+    build:
+      context: .
+      dockerfile: ABCofRealEstate.WebApi/Dockerfile
+    ports:
+      - "80:80"
+    networks:
+      - abcofrealestate.webapi
+    depends_on:
+      - postgres_db
+  postgres_db:
+    container_name: postgres
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: company_abc_real_estate
+    ports:
+      - "5432:5432"
+    networks:
+      - abcofrealestate.webapi
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+volumes:
+  postgres-data:

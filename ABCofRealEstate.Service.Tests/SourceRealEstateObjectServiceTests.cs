@@ -1,4 +1,5 @@
-﻿using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
+﻿using ABCofRealEstate.Services.Interfaces.Services;
+using ABCofRealEstate.Services.Models.SourceRealEstateObjects;
 using Bogus;
 
 namespace ABCofRealEstate.Service.Tests

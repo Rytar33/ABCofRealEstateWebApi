@@ -1,5 +1,4 @@
 ﻿using ABCofRealEstate.Services.Models.Garages;
-using ABCofRealEstate.Services.Validations.Garages;
 
 namespace ABCofRealEstate.Services
 {
@@ -7,8 +6,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<GarageDetailResponse>> Create(GarageCreateRequest garageCreateRequest)
         {
-            var resultValidation = garageCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Garage));
             if (!resultResponse.IsSuccess)
@@ -43,8 +40,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<GarageDetailResponse>> Change(GarageChangeRequest garageChangeRequest)
         {
-            var resultValidation = garageChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var garageGet = await db.Garage.AsNoTracking().FirstOrDefaultAsync(g => g.Id == garageChangeRequest.Id);
             if(garageGet == null)

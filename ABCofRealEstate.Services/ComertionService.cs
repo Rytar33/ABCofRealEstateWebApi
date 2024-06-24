@@ -1,5 +1,4 @@
 ﻿using ABCofRealEstate.Services.Models.Comertions;
-using ABCofRealEstate.Services.Validations.Comertions;
 
 namespace ABCofRealEstate.Services
 {
@@ -7,8 +6,6 @@ namespace ABCofRealEstate.Services
     {
         public async Task<BaseResponse<ComertionDetailResponse>> Create(ComertionCreateRequest comertionCreateRequest)
         {
-            var resultValidation = comertionCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Comertion));
             if (!resultResponse.IsSuccess)
@@ -47,8 +44,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<ComertionDetailResponse>> Change(ComertionChangeRequest comertionChangeRequest)
         {
-            var resultValidation = comertionChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
 
             await using var db = new RealEstateDataContext();
             var comertionGet = await db.Comertion.AsNoTracking().FirstOrDefaultAsync(a => a.Id == comertionChangeRequest.Id);

@@ -1,0 +1,22 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  app:
+    build:
+      context: "C:\\Users\\user\\RiderProjects\\ABCofRealEstateWebApi"
+      dockerfile: "ABCofRealEstate.WebApi/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net7.0/ABCofRealEstate.WebApi.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_STATICWEBASSETS: "/app/bin/Debug/net7.0/ABCofRealEstate.WebApi.staticwebassets.runtime.CT.json"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "abcofrealestate.webapi:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\user\\.nuget\\packages:/root/.nuget/packages"
+    - "C:\\Users\\user\\RiderProjects\\ABCofRealEstateWebApi\\ABCofRealEstate.WebApi:/app:rw"
+    - "C:\\Users\\user\\RiderProjects\\ABCofRealEstateWebApi:/src:rw"
+    working_dir: "/app"

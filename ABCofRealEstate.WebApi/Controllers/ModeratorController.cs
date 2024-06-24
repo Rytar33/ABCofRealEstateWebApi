@@ -1,9 +1,9 @@
 ﻿using ABCofRealEstate.Services;
 using ABCofRealEstate.Services.Extensions;
-using ABCofRealEstate.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using ABCofRealEstate.Services.Models.Moderators;
 using Microsoft.AspNetCore.Authorization;
+using ABCofRealEstate.Services.Interfaces.Services;
 
 namespace ABCofRealEstate.WebApi.Controllers
 {
@@ -22,8 +22,8 @@ namespace ABCofRealEstate.WebApi.Controllers
         public async Task<IActionResult> Login(ModeratorAuthenticationRequest moderatorAuthenticationRequest)
         {
             var responseLogIn = await _moderatorService.LogIn(moderatorAuthenticationRequest);
-            return !responseLogIn.IsSuccess 
-                ? Ok("qwerty123".GetSha256())
+            return !responseLogIn.IsSuccess
+                ? BadRequest(responseLogIn.ErrorMessage)
                 : Ok(responseLogIn.Data);
         }
         [Authorize]

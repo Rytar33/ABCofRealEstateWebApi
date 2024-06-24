@@ -1,5 +1,5 @@
 ﻿using ABCofRealEstate.Services;
-using ABCofRealEstate.Services.Interfaces;
+using ABCofRealEstate.Services.Interfaces.Services;
 using ABCofRealEstate.Services.Models.Employees;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,14 +1,15 @@
 ﻿using ABCofRealEstate.Services.Models.Areas;
-using ABCofRealEstate.Services.Validations.Areas;
 
 namespace ABCofRealEstate.Services
 {
     public class AreaService : IAreaService
     {
+        public AreaService() 
+        {
+            
+        }
         public async Task<BaseResponse<AreaDetailResponse>> Create(AreaCreateRequest areaCreateRequest)
         {
-            var resultValidation = areaCreateRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             var resultResponse = await new SourceRealEstateObjectService()
                 .Create(new SourceRealEstateObjectCreateRequest(EnumObject.Area));
             if (!resultResponse.IsSuccess)
@@ -42,8 +43,6 @@ namespace ABCofRealEstate.Services
         }
         public async Task<BaseResponse<AreaDetailResponse>> Change(AreaChangeRequest areaChangeRequest)
         {
-            var resultValidation = areaChangeRequest.GetResultValidation();
-            if (resultValidation.IsSuccess == false) return resultValidation;
             await using var db = new RealEstateDataContext();
             var areaGet = await db.Area.AsNoTracking().FirstOrDefaultAsync(a => a.Id == areaChangeRequest.Id);
             if (areaGet == null)
@@ -128,6 +127,7 @@ namespace ABCofRealEstate.Services
             await db.SaveChangesAsync();
             await serviceRealEstateObject.Delete(idSource);
             return new BaseResponse<AreaDetailResponse> { IsSuccess = true };
+            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ABCofRealEstate.Services.Models.Apartments;
+﻿using ABCofRealEstate.Services.Interfaces.Services;
+using ABCofRealEstate.Services.Models.Apartments;
 
 namespace ABCofRealEstate.Service.Tests
 {
